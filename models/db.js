@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
+var mongoDB = 'mongodb://localhost:27017/organicstore';
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+mongoose.set('useCreateIndex', true);
 
-mongoose.connect('mongodb://localhost:27017/ecommerceOrders',{useNewUrlParser:true},(err)
-=>{
-    if(!err) {
+mongoose.connect(mongoDB, {
+    useNewUrlParser: true
+}, (err) => {
+    if (!err) {
         console.log('MongoDB connected');
     } else {
-        console.log('Error: '+err);
+        console.log('Error: ' + err);
     }
 });
 

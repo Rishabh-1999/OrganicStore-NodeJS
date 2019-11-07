@@ -1,52 +1,53 @@
 <header>
-    <nav class="navbar fixed-top navbar-dark navbar-expand-md bg-sucess text-white">
-        <a class="text-white navbar-brand" href="/">
-            <i class="fab fa-pagelines"></i>Organic Store
+    <nav class="navbar fixed-top navbar-dark navbar-expand-md bg-success">
+        <a class="navbar-brand" href="/">
+            <i class="fa fa-pagelines"></i>Organic Store
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collpase navbar-collapse" id="navbarCollpase">
             <ul class="navbar-nav mr-auto menu">
-                <li class="nav -item active">
-                    <a href="/" class="nav-link">Homw</a>
+                <li class="nav-item active">
+                    <a href="/" class="nav-link">Home</a>
                 </li>
             </ul>
             <form class="form-inline mt-2 mt-md-0">
-                <a href="#" class="text-white nav-link">
+                <a href="#" class=" nav-link">
                     <i class="text-warning fas fa-shopping-cart"></i>
                     Shopping Cart <i style="color:yellow" id="cart_n"></i>
                 </a>
-                <a href="/admin" class="nav-link disabled text-white">
-                    <i class="far fa-user"></i> Administrator
+                <a href="/admin" class="nav-link disabled ">
+                    <i class="fa fa-user"></i> Administrator
                 </a>
             </form>
         </div>
     </nav>
- </header>
- <div class="container mt-3">
-     <main role="main">
-         <div class="row">
-             <div class="col">
-                 <div class="table-responsive-sm">
-                     <table class="table">
-                         <thead>
-                             <tr>
-                                 <th scope="col">#</th>
-                                 <th scope="col">Product</th>
-                                 <th scope="col">Description</th>
-                                 <th scope="col">Quantity</th>
-                                 <th scope="col">Price</th>
-                             </tr>
-                         </thead>
-                         <tbody id="table">
+</header>
 
-                         </tbody>
-                     </table>
-                 </div>
-             </div>
-         </div>
-         <hr class="featurette-divider">
-     </main>
- </div>
- <script src="/js/cart.js"></script>
+<div class="container mt-3">
+    <main role="main">
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive-sm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider">
+    </main>
+</div>
+<script src="/js/cart.js"></script>

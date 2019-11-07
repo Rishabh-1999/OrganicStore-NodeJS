@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title> Orgainc Store </title>
+  <style>
+    body {
+      background: #007bff;
+      background: linear-gradient(to right, # 0062E6,
+          #33AEFF);
+    }
+
+    .card-signin {
+      border: 0;
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card-signin .card-body {
+      padding: 2rem;
+    }
+
+    .form-signin {
+      width: 100%;
+    }
+
+    .form-signin .btn {
+      font-size: 80%;
+      border-radius: 5rem;
+      letter-spacing: .1rem;
+      font-weight: bold;
+      padding: 1rem;
+      transition: all 0.2s;
+    }
+
+
+    /* Fallback for Edge
+        -------------------------------------------------- */
+
+    @supports (-ms-ime-align: auto) {
+      .form-label-group>label {
+        display: none;
+      }
+
+      .form-label-group input::-ms-input-placeholder {
+        color: # 777;
+      }
+    }
+
+    /* Fallback for IE
+        -------------------------------------------------- */
+
+    @media all and(-ms - high - contrast: none),
+    (-ms - high - contrast: active) {
+      .form - label - group>label {
+        display: none;
+      }
+
+      .form - label - group input: -ms - input - placeholder {
+        color: #777;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <i class="fab fa-pagelines"></i>
+          <div class="card-body">
+            <h5 class="card-title text-center"> Sign In </h5>
+            <div class="form-label-group">
+              <label for="inputEmail"> Email address </label>
+              <input type="email" id="email" class="form-control" name="email" placeholder="Email address" required
+                autofocus>
+            </div>
+            <div class="form-label-group">
+              <label for="inputPassword"> Password </label>
+              <input type="password" id="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+            <div class="custom-control custom-checkbox mb-3">
+              <input type="checkbox" class="custom-control-input" id="customCheck1">
+              <label class="custom-control-label" for="customCheck1"> Remember password </label>
+            </div><button class="btn btn-lg btn-primary btn-block text-uppercase" id="submit" type="submit"> Sign in
+            </button>
+            <hr class="md-4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+    var submit = document.getElementById("submit");
+    submit.addEventListener("click", function () {
+      if (!email.value == "" && !password.value == "") {
+        var xml = new XMLHttpRequest();
+        xml.open("POST", "/users/checklogin");
+        xml.addEventListener('load', function () {
+          var data = xml.responseText;
+          window.location = '/home';
+        })
+        xml.setRequestHeader("Content-Type", "application/json");
+        xml.send(JSON.stringify({
+          email: email.value,
+          password: password.value
+        }));
+      } else
+        alert('Enter Value on field');
+    })
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
