@@ -1,89 +1,77 @@
-//GLOBAL
-var products = JSON.parse(localStorage.getItem('cart'));
-var cartitems = [];
-var cart_n = document.getElementById('cart_n');
 var table = document.getElementById('table');
 var total = 0;
 
 //HTML
-function tableHTML(i) {
+function tableHTML(data) {
+    console.log(data)
     return `
                 <tr>
-                    <th scope="row">${i+1}</th>
-                    <th><img style="width:90px;" src="${products[i].url}"></th>
-                    <td>${products[i].name}</td>
+                    <th scope="row">${data._id}</th>
+                    <th><img style="width:90px;" src=".${data.imgloc}"></th>
+                    <td>${data.name}</td>
                     <td>1</td>
-                    <td${products[i].price}</td>
+                    <td>${data.price}</td>
+                    <td><button class="btn btn-danger" onclick="deletefromcart('` + data._id + `')"><i class="fa fa-trash"></i></button></td>
                 </tr>
     `;
 }
-//CLEAN 
+
 function clean() {
-    localStorage.clear();
-    for (let index = 0; index < products.length; index++) {
-        table.innerHTML += tableHTML(index);
-        taotal = total + parseInt(products[index].price);
-    }
-    total = 0;
-    table.innerHTML = `
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-    `;
-    cart_n.innerHTML = '';
-    document.getElementById("btnBuy").style.display = "none";
-    document.getElementById("btnClean").style.display = "none";
+    $.ajax({
+            type: 'POST',
+            url: "/user/cleancart",
+            dataType: "json",
+            async: true
+        })
+        .done(function (data) {
+            table.innerHTML = "";
+        });
+}
+
+function buyfromcart() {
+    $.ajax({
+            type: 'POST',
+            url: "/user/buyfromcart",
+            dataType: "json",
+            async: true
+        })
+        .done(function (data) {
+            window.location = "/user/ordered";
+        });
+}
+
+function deletefromcart(id) {
+    $.ajax({
+            type: 'POST',
+            url: "/user/deletefromcart",
+            dataType: "json",
+            data: {
+                _id: id
+            },
+            async: true
+        })
+        .done(function (data) {
+            initfirst();
+        });
+}
+
+function initfirst() {
+    $.ajax({
+            url: "/user/getCartProduct",
+            dataType: "json",
+            async: true
+        })
+        .done(function (data) {
+            total.innerHTML = "";
+            for (var index = 0; index < data.length; index++) {
+                table.innerHTML += tableHTML(data[index].productdata);
+                total = total + parseFloat(data[index].productdata.price);
+            }
+            console.log(total);
+            document.getElementById('carttotal').innerHTML = "Total: Rs. " + total;
+        });
 }
 
 (() => {
-    if (products.length != null)
-        for (let index = 0; index < products.length; index++) {
-            table.innerHTML += tableHTML(index);
-            total = total + parseInt(products[index].price);
-        }
-    table.innerHTML += `
-        <tr>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col">Total: $${total}.00</th>
-        </tr>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col">
-                <button id="btnClean onclick="clean()" class="btn text-white btn-warning">
-                    Clean Shopping Cart
-                </button>
-            </th>
-            <th scope="col">
-                <form id="form1" action="/cart" method="POST" autocomplete="off">
-                    <input type="hidden" name="total" value="${total}">
-                    <input type="hidden" name="_id" val="">
-                    <button id="submitbtn" class="btn btn-success">Buy</button>
-                </form>
-            </th>
-        </tr>
-    `;
-    products = JSON.parse(localStorage.getItem('cart'));
-    cart_n.innerHTML = `[${products.length}]`;
+    initfirst();
 })();
-var forms = document.getElementById('form1');
-document.getElementById('submitbtn').addEventListener('click', () => {
-    localStorage.clear;
-    setTimeout(() => {
-        sub();
-    }, 5000);
-})
-
-function sub() {
-    setTimeout(() => {
-        form.submit();
-    }, 5000);
-}

@@ -4,6 +4,7 @@ var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 const path = require("path");
 const exphbs = require("express-handlebars");
+var favicon = require('serve-favicon');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var mongoose = require('mongoose');
@@ -12,6 +13,7 @@ const bodyparser = require("body-parser");
 const orderController = require("./controllers/orderController");
 
 var app = express();
+
 /* Bodyparser */
 app.use(express.urlencoded({
   extended: true
@@ -30,6 +32,7 @@ app.use(session({
 }));
 
 app.use(bodyparser.json());
+app.use(favicon(path.join(__dirname, 'public//img/', 'logo.ico')));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -40,7 +43,7 @@ var Users = require("./models/Users");
 var middleware = require('./middleware/middleware');
 
 /* Routing Implementation */
-app.use('/users', require('./routes/Users'));
+app.use('/user', require('./routes/Users'));
 app.use('/products', require('./routes/Products'));
 
 
@@ -50,12 +53,30 @@ app.get("/", function (req, res) {
 
 app.get("/home", function (req, res) {
   res.render("home", {
-    data: req.session.data
+    data: req.session.data,
+    shownavpro: "true"
   });
 });
 
-app.get("/sellerpage", middleware.checkSeller, function (req, res) {
-  res.render("sellerpage");
+app.get("/user/cart", function (req, res) {
+  res.render("cartpage", {
+    data: req.session.data,
+    shownavpro: "false"
+  });
+});
+
+app.get("/user/ordered", function (req, res) {
+  res.render("orderedpage", {
+    data: req.session.data,
+    shownavpro: "false"
+  });
+});
+
+app.get("/user/sellerpage", middleware.checkSeller, function (req, res) {
+  res.render("sellerpage", {
+    data: req.session.data,
+    shownavpro: "false"
+  });
 });
 
 app.listen(3000, () => {

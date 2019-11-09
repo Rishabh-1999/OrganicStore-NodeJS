@@ -8,19 +8,23 @@ var loginSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
+  DOB: String,
+  phoneno: String,
   type: String,
+  totalincart: Number,
+  totalinordered: Number,
   cart: [{
-    productid: [{
+    productdata: {
       'type': mongoose.Schema.Types.ObjectId,
       'ref': products
-    }],
+    },
     quantity: Number
   }],
   ordered: [{
-    productid: [{
+    productdata: {
       'type': mongoose.Schema.Types.ObjectId,
       'ref': products
-    }],
+    },
     quantity: Number
   }]
 });

@@ -1,0 +1,58 @@
+<header>
+  <nav
+    class="navbar fixed-top navbar-dark navbar-expand-md bg-success text-white"
+  >
+    <div class="">
+      <a class="text-white navbar-brand" href="/home">
+        <i class="fa fa-pagelines"></i> Organic Store
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarCollapse"
+        aria-controls="navbarCollapse"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collpase navbar-collapse" id="navbarCollpase">
+      <% if( shownavpro == "true"){ %>
+      <ul class="navbar-nav mr-auto menu">
+        <li class="nav -item active">
+          <a href="/home" class="nav-link">Home</a>
+        </li>
+        <li class="nav -item active">
+          <a href="/home#fruit" class="nav-link">Fruits</a>
+        </li>
+        <li class="nav -item active">
+          <a href="#juice" class="nav-link">Juices</a>
+        </li>
+        <li class="nav -item active">
+          <a href="#vegetable" class="nav-link">Vegetable</a>
+        </li>
+      </ul>
+      <% } %>
+      <div class="form-inline mt-2 mt-md-0 float-right">
+        <a href="/user/cart" class="text-white nav-link">
+          <i class="text-warning fa fa-shopping-cart"></i>
+          Shopping Cart <i style="color:yellow" id="cart_n"></i>
+        </a>
+        <% if(data.type == "Admin"){ %>
+        <a href="/admin" class="nav-link text-white">
+          <i class="far fa-user"></i> Administrator
+        </a>
+        <% } %> <% if(data.type == "Customer"){ %>
+        <a href="/user/ordered" class="nav-link text-white">
+          <i class="fa fa-shopping-basket"></i> Ordered
+        </a>
+        <a href="#" class="nav-link text-white">
+          <%= data.name %>
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+</header>

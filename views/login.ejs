@@ -105,7 +105,7 @@
     submit.addEventListener("click", function () {
       if (!email.value == "" && !password.value == "") {
         var xml = new XMLHttpRequest();
-        xml.open("POST", "/users/checklogin");
+        xml.open("POST", "/user/checklogin");
         xml.addEventListener('load', function () {
           var data = xml.responseText;
           window.location = '/home';

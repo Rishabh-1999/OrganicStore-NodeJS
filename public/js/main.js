@@ -184,7 +184,7 @@ function addTocart(id) {
     //     cart_n.innerHTML = `[${products.length}]`;
     //     document.getElementById(btncart).style.display = "none";
     var xml = new XMLHttpRequest();
-    xml.open("POST", "/users/addToCart");
+    xml.open("POST", "/user/addToCart");
     xml.addEventListener('load', function () {
         var data = xml.responseText;
         window.location = '/home';
