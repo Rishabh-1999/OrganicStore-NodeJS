@@ -6,21 +6,21 @@ function checkSession(req, res, next) {
 }
 
 function checkCustomer(req, res, next) {
-    if (req.session.data.role == "Customer")
+    if (req.session.data.type == "Customer")
         next();
     else
         res.redirect('/');
 }
 
 function checkAdmin(req, res, next) {
-    if (req.session.data.role == "Admin")
+    if (req.session.data.type == "Admin")
         next();
     else
         res.redirect('/');
 }
 
 function checkSeller(req, res, next) {
-    if (req.session.data.role == "Seller")
+    if (req.session.data.type == "Seller")
         next();
     else
         res.redirect('/');

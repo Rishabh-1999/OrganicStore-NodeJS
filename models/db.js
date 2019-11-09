@@ -5,7 +5,8 @@ var db = mongoose.connection;
 mongoose.set('useCreateIndex', true);
 
 mongoose.connect(mongoDB, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }, (err) => {
     if (!err) {
         console.log('MongoDB connected');
@@ -13,5 +14,3 @@ mongoose.connect(mongoDB, {
         console.log('Error: ' + err);
     }
 });
-
-require('./order.model');

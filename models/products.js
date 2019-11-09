@@ -1,10 +1,31 @@
 var mongoose = require('mongoose');
 
 var productSchema = new mongoose.Schema({
-    category: String,
-    name: String,
-    price: String,
-    imgloc: String
+    category: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    price: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    imgloc: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    sellercompany: {
+        type: String,
+        required: true,
+        trim: true
+    }
 })
 
 var products = mongoose.model('products', productSchema);

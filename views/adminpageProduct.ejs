@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orgainc Store : Home</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+</head>
+
+<body>
+    <% include paritials/navbar.ejs %>
+
+    <div class="container" style="margin-top: 80px; width: 100%;">
+        <h1 class="text-center">Product Details</h1>
+        <main role="main" class="col-md-12">
+            <div class="chartjs-size-monitor"
+                style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                <div class="chartjs-size-monitor-expand"
+                    style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+                </div>
+                <div class="chartjs-size-monitor-shrink"
+                    style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+                </div>
+            </div>
+            <div class="">
+                <div class="form-control" id="roleFilter"
+                    style="float: left;width:200px;font-weight:bold;background-color: #2D312C;color:#eee;">
+                    Product List
+                </div>
+                <button id="refreshbtn" class="btn btn-default"
+                    style="float: right;background-color: #2D312C;color: #fff">
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh
+                </button>
+
+                <br>
+                <br>
+                <div class="table-responsive" id="tabelDIV" style="width:1000px;">
+                    <div class="col-sm-12" style="width:1000px;">
+                        <table class="table" id="table" style="width:1000px;">
+                            <thead id="theader">
+                            </thead>
+                            <tbody class="tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="deletedmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="deletedmodal-header">
+                    <h5 class="modal-title"><i class="fa fa-pagelines"></i> Organic Store</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="deletedmodal-content">Item Deleted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/adminpageProduct-js.js"></script>
+
+
+</body>
+
+</html>

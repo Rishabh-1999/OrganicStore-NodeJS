@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"organicstore.sessions"},{"v":{"$numberInt":"2"},"key":{"expires":{"$numberInt":"1"}},"name":"expires_1","ns":"organicstore.sessions","expireAfterSeconds":{"$numberInt":"0"}}],"uuid":"afdc609a1a5346a1a53a532993e2d18a"}
