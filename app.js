@@ -67,6 +67,10 @@ app.get("/", function (req, res) {
   res.render("login");
 });
 
+app.get("/register", function (req, res) {
+  res.render("register");
+});
+
 app.get("/home", middleware.checkSession, function (req, res) {
   if (req.session.data.type == "Customer")
     res.render("home", {

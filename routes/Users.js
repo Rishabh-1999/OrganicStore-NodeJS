@@ -71,6 +71,36 @@ app.post("/checkLogin", function (req, res) {
     });
 });
 
+app.post("/register", function (req, res) {
+    console.log(req.body);
+    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+        let us = new Users({
+            "name": req.body.name,
+            "email": req.body.email,
+            "phoneno": req.body.phoneno,
+            "gender": req.body.gender,
+            "DOB": req.body.DOB,
+            "password": hash,
+            "address1": req.body.address1,
+            "address2": req.body.address2,
+            "city": req.body.city,
+            "state": req.body.state,
+            "zipcode": req.body.zipcode,
+            "type": "Customer",
+            "totalincart": 0,
+            "cart": [],
+            "ordered": []
+        })
+        us.save()
+            .then(data => {
+                res.send("1");
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    });
+})
+
 /* POST change password */
 app.post("/changepassword", middleware.checkSession, function (req, res) {
     Users.findOne({
