@@ -14,49 +14,6 @@ function tableHTML(data, quantity) {
     `;
 }
 
-function clean() {
-    $.ajax({
-            type: 'POST',
-            url: "/user/cleancart",
-            dataType: "json",
-            async: true
-        })
-        .done(function (data) {
-            if (data == "1") {
-                table.innerHTML = "";
-                $("#multiModal-content").text("Cleaned Cart");
-                $("#multiModal-header").css("background-color", "forestgreen");
-            } else {
-                $("#multiModal-content").text("Failed To clean Cart");
-                $("#multiModal-header").css("background-color", "red");
-            }
-            $("#multiModal").modal();
-            document.getElementById("cart_n").innerHTML = "[0]";
-        });
-}
-
-function buyfromcart() {
-    $.ajax({
-            type: 'POST',
-            url: "/user/buyfromcart",
-            dataType: "json",
-            async: true
-        })
-        .done(function (data) {
-            if (data == "1") {
-                $("#multiModal-content").text("Ordered have been placed");
-                $("#multiModal-header").css("background-color", "forestgreen");
-                $("#table").hide('slow', function () {
-                    $("#" + id).remove();
-                });
-            } else {
-                $("#multiModal-content").text("Failed to place order");
-                $("#multiModal-header").css("background-color", "red");
-            }
-            $("#multiModal").modal();
-        });
-}
-
 function deletefromcart(id) {
     $.ajax({
             type: 'POST',

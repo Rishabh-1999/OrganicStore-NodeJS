@@ -22,6 +22,12 @@
     <div class="container" style="margin-top:80px;">
         <h1 class="text-center display-4 font-weight-bold"><u>Shopping Cart</u></h1>
         <br>
+        <% if (success.length > 0) { %>
+        <br>
+        <div class="alert alert-success text-center" style="width:100%;margin-left:10px;margin-right:10px;">
+            <%= success %>
+        </div>
+        <% } %>
         <main role="main">
             <div class="row">
                 <div class="col">
@@ -52,13 +58,16 @@
                                     <th scope="col"></th>
                                     <th scope="col"></th>
                                     <th scope="col">
-                                        <button id="btnClean" onclick="clean()" class="btn text-white btn-warning">
-                                            Clean Shopping Cart
-                                        </button>
+                                        <form method="POST" action="/user/cleancart">
+                                            <button id="btnClean" submit="submit" class="btn text-white btn-warning">
+                                                Clean Shopping Cart
+                                            </button>
+                                        </form>
                                     </th>
                                     <th scope="col">
-                                        <button id="submitbtn" onclick="buyfromcart()"
-                                            class="btn btn-success">Buy</button>
+                                        <form method="POST" action="/user/buyfromcart">
+                                            <button type="submit" id="submitbtn" class="btn btn-success">Buy</button>
+                                        </form>
                                     </th>
                                 </tr>
                             </tfoot>

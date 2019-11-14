@@ -1,15 +1,18 @@
 const express = require("express");
-var session = require('express-session');
-var mongoStore = require('connect-mongo')(session);
+var session = require("express-session");
+var mongoStore = require("connect-mongo")(session);
 var bodyParser = require("body-parser");
 const path = require("path");
 const exphbs = require("express-handlebars");
-var favicon = require('serve-favicon');
-var mongoose = require('mongoose');
+var favicon = require("serve-favicon");
+var mongoose = require("mongoose");
+var ejs = require('ejs');
+var engine = require('ejs-mate');
 const bodyparser = require("body-parser");
-var morgan = require('morgan')
+var morgan = require("morgan");
+var flash = require("express-flash");
 
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 var app = express();
@@ -17,118 +20,145 @@ var app = express();
 /* DB */
 require("./models/db");
 
-/* Bodyparser */
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(morgan("dev"));
 
-app.use(morgan('dev'));
+var db = mongoose.connection;
 
-// parse application/json
+/* Session */
+app.use(
+  session({
+    secret: "abcUCAChitkara",
+    resave: true,
+    saveUninitialized: true,
+    store: new mongoStore({
+      mongooseConnection: db
+    })
+  })
+);
+
+app.use(favicon(path.join(__dirname, "public//img/", "logo.ico")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
-
-// parse application/x-www-form-urlencoded
 app.use(
   bodyParser.urlencoded({
     extended: true
   })
 );
-
-
-var db = mongoose.connection;
-
-/* Session */
-app.use(session({
-  secret: "abcUCAChitkara",
-  resave: true,
-  saveUninitialized: false,
-  store: new mongoStore({
-    mongooseConnection: db
-  })
-}));
-
-app.use(bodyparser.json());
-app.use(favicon(path.join(__dirname, 'public//img/', 'logo.ico')));
-app.use(express.static(path.join(__dirname, "public")));
+app.engine('ejs', engine);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(flash());
 
 /* Required Model */
 var producttable = require("./models/products");
 var Users = require("./models/Users");
-var middleware = require('./middleware/middleware');
+var middleware = require("./middleware/middleware");
 
 /* Routing Implementation */
-app.use('/user', require('./routes/Users'));
-app.use('/products', require('./routes/Products'));
+app.use("/user", require("./routes/Users"));
+app.use("/products", require("./routes/Products"));
 
 app.get("/", function (req, res) {
-  req.session.destroy();
-  res.render("login");
+  if (req.session.isLogin) {
+    req.session.isLogin = 0;
+  }
+  res.render("login", {
+    errors: req.flash('errors')
+  });
 });
 
 app.get("/register", function (req, res) {
-  res.render("register");
+  res.render("register", {
+    errors: req.flash('errors')
+  });
 });
 
 app.get("/home", middleware.checkSession, function (req, res) {
   if (req.session.data.type == "Customer")
     res.render("home", {
       data: req.session.data,
-      shownavpro: "true"
+      shownavpro: "true",
+      success: req.flash('success'),
+      errors: req.flash('errors')
     });
   else if (req.session.data.type == "Seller")
     res.render("sellerpage", {
       data: req.session.data,
-      shownavpro: "false"
+      shownavpro: "false",
+      success: req.flash('success')
     });
   else if (req.session.data.type == "Admin")
     res.render("adminpage", {
       data: req.session.data,
-      shownavpro: "false"
+      shownavpro: "false",
+      success: req.flash('success')
     });
 });
 
-app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (req, res) {
+app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (
+  req,
+  res
+) {
   res.render("adminpage", {
     data: req.session.data,
     shownavpro: "false"
   });
 });
 
-app.get("/adminpageUser", middleware.checkSession, middleware.checkAdmin, function (req, res) {
-  res.render("adminpageUser", {
-    data: req.session.data,
-    shownavpro: "false"
-  });
-});
+app.get(
+  "/adminpageUser",
+  middleware.checkSession,
+  middleware.checkAdmin,
+  function (req, res) {
+    res.render("adminpageUser", {
+      data: req.session.data,
+      shownavpro: "false"
+    });
+  }
+);
 
-app.get("/adminpageProduct", middleware.checkSession, middleware.checkAdmin, function (req, res) {
-  res.render("adminpageProduct", {
-    data: req.session.data,
-    shownavpro: "false"
-  });
-});
+app.get(
+  "/adminpageProduct",
+  middleware.checkSession,
+  middleware.checkAdmin,
+  function (req, res) {
+    res.render("adminpageProduct", {
+      data: req.session.data,
+      shownavpro: "false"
+    });
+  }
+);
 
-app.get("/user/cart", middleware.checkSession, middleware.checkCustomer, function (req, res) {
-  res.render("cartpage", {
-    data: req.session.data,
-    shownavpro: "false"
-  });
-});
+app.get(
+  "/user/cart",
+  middleware.checkSession,
+  middleware.checkCustomer,
+  function (req, res) {
+    res.render("cartpage", {
+      data: req.session.data,
+      shownavpro: "false",
+      success: req.flash('success')
+    });
+  }
+);
 
-app.get("/user/changepasswordpage", middleware.checkSession, function (req, res) {
+app.get("/user/changepasswordpage", middleware.checkSession, function (
+  req,
+  res
+) {
   res.render("changepasswordpage", {
     data: req.session.data,
-    shownavpro: "false"
+    shownavpro: "false",
+    success: req.flash('success'),
+    errors: req.flash('errors')
   });
 });
 
-app.get('/logout', middleware.checkSession, function (req, res) {
+app.get("/logout", middleware.checkSession, function (req, res) {
   req.session.destroy();
-  res.render('login')
-  console.log('logouted');
-})
+  res.render("login");
+  console.log("logouted");
+});
 
 app.listen(3000, () => {
   console.log("Sever on port: 3000");

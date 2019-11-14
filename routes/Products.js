@@ -28,7 +28,6 @@ app.get("/getFruits", middleware.checkSession, function (req, res) {
         .exec(function (error, result) {
             if (error) throw error;
             else {
-                console.log("GET /products/getFruits");
                 res.send(result);
             }
         });
@@ -42,10 +41,8 @@ app.get("/getJuice", middleware.checkSession, function (req, res) {
         })
         .exec(function (error, result) {
             if (error) throw error;
-            else {
-                console.log("GET /products/getJuice");
+            else
                 res.send(result);
-            }
         });
 });
 
@@ -57,10 +54,8 @@ app.get("/getVegetable", middleware.checkSession, function (req, res) {
         })
         .exec(function (error, result) {
             if (error) throw error;
-            else {
-                console.log("GET /products/getVegetable");
+            else
                 res.send(result);
-            }
         });
 });
 
@@ -72,10 +67,8 @@ app.get("/getSellerProduct", middleware.checkSession, middleware.checkSeller, fu
         })
         .exec(function (error, result) {
             if (error) throw error;
-            else {
-                console.log("GET /products/getSellerProduct");
+            else
                 res.send(result);
-            }
         });
 });
 
@@ -109,7 +102,6 @@ app.post('/addproduct', middleware.checkSession, middleware.checkSeller, (req, r
             })
             newProduct.save()
                 .then(data => {
-                    console.log("POST /products/addproduct");
                     res.writeHead(200, {
                         'Content-Type': 'text/html'
                     });
@@ -193,7 +185,6 @@ app.post('/getProductTable', middleware.checkSession, middleware.checkAdmin, fun
                         if (err)
                             console.log(err);
                         else {
-                            console.log("POST /products/getProductTable");
                             res.send({
                                 "recordsTotal": totalCount,
                                 "recordsFiltered": filteredCount,
@@ -216,7 +207,6 @@ app.post("/deleteproduct", middleware.checkSession, middleware.checkAdmin, funct
             console.log(error);
             res.send("0");
         } else {
-            console.log("POST /products/deleteproduct");
             res.send("1");
         }
     })

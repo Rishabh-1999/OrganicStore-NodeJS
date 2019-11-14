@@ -7,6 +7,7 @@ var passport = require("passport");
 var mongojs = require("mongojs");
 var dateFormat = require('dateformat');
 var bcrypt = require("bcrypt");
+var flash = require("express-flash");
 const saltRounds = 10;
 
 // parse application/x-www-form-urlencoded
@@ -54,16 +55,18 @@ app.post("/checkLogin", function (req, res) {
                         req.session.name = result.name;
                         req.session.data = ob;
                         console.log("-------------------Logined--------------------")
-                        if (req.session.data.type == "Customer") res.send("Customer");
-                        else if (req.session.data.type == "Admin") res.send("Admin");
+                        if (req.session.data.type == "Customer") res.redirect('/home');
+                        else if (req.session.data.type == "Admin") res.redirect("/adminpage");
                         else if ((req.session.data.type = "Seller"))
-                            res.send("Seller");
+                            res.redirect("/products/sellerpage");
                     } else {
-                        res.send("no");
+                        req.flash('errors', 'Username/Password Incorrect.');
+                        return res.redirect('/');
                     }
                 });
             } else {
-                res.send("no");
+                req.flash('errors', 'Username/Password Incorrect.');
+                return res.redirect('/');
             }
         }
     ).catch(err => {
@@ -72,33 +75,41 @@ app.post("/checkLogin", function (req, res) {
 });
 
 app.post("/register", function (req, res) {
-    console.log(req.body);
-    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-        let us = new Users({
-            "name": req.body.name,
-            "email": req.body.email,
-            "phoneno": req.body.phoneno,
-            "gender": req.body.gender,
-            "DOB": req.body.DOB,
-            "password": hash,
-            "address1": req.body.address1,
-            "address2": req.body.address2,
-            "city": req.body.city,
-            "state": req.body.state,
-            "zipcode": req.body.zipcode,
-            "type": "Customer",
-            "totalincart": 0,
-            "cart": [],
-            "ordered": []
-        })
-        us.save()
-            .then(data => {
-                res.send("1");
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    });
+    Users.findOne({
+        email: req.body.email
+    }, function (err, result) {
+        if (result) {
+            req.flash('errors', 'Account with that email address already exists');
+            return res.redirect('/register');
+        } else {
+            bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+                let us = new Users({
+                    "name": req.body.name,
+                    "email": req.body.email,
+                    "phoneno": req.body.phoneno,
+                    "gender": req.body.gender,
+                    "DOB": req.body.DOB,
+                    "password": hash,
+                    "address1": req.body.address1,
+                    "address2": req.body.address2,
+                    "city": req.body.city,
+                    "state": req.body.state,
+                    "zipcode": req.body.zipcode,
+                    "type": "Customer",
+                    "totalincart": 0,
+                    "cart": [],
+                    "ordered": []
+                })
+                us.save()
+                    .then(data => {
+                        res.redirect('/');
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            });
+        }
+    })
 })
 
 /* POST change password */
@@ -126,14 +137,17 @@ app.post("/changepassword", middleware.checkSession, function (req, res) {
                                     throw error;
                                 else {
                                     if (result == null)
-                                        res.send("0");
+                                        req.flash('errors', 'Password failed to Update.');
                                     else
-                                        res.send("1");
+                                        req.flash('success', 'Password Updated.');
+                                    return res.redirect('/user/changepasswordpage');
                                 }
                             });
                         });
-                    } else
-                        res.send("0");
+                    } else {
+                        req.flash('errors', 'Old Password Incorrect.');
+                        return res.redirect('/user/changepasswordpage');
+                    }
                 });
             }
         }
@@ -263,7 +277,6 @@ app.post("/addToCart", function (req, res) {
             if (error) {
                 res.send("0");
             } else {
-                console.log("POST /user/addToCart")
                 req.session.data.totalincart = req.session.data.totalincart + 1;
                 res.send("1");
             }
@@ -283,8 +296,8 @@ app.post("/cleancart", function (req, res) {
             res.send("0");
         } else {
             req.session.data.totalincart = 0;
-            console.log("POST /user/cleancart")
-            res.send("1");
+            req.flash('success', 'Successfully Cart Cleaned');
+            return res.redirect('/user/cart');
         }
     })
 });
@@ -308,11 +321,16 @@ app.post("/updateprofile", function (req, res) {
         },
         function (error, result) {
             if (error) {
-                res.send("0");
+                req.flash('errors', 'Profile failed to update.');
             } else {
-                console.log("POST /user/updateprofile")
-                res.send("1");
+                req.flash('success', 'Profile Updated');
             }
+            if (req.session.data.type == "Customer")
+                return res.redirect('/home');
+            else if (req.session.data.type == "Seller")
+                return res.redirect('/sellerpage');
+            else if (req.session.data.type == "Admin")
+                return res.redirect('/adminpage');
         })
 });
 
@@ -325,7 +343,6 @@ app.get("/getCartProduct", function (req, res) {
         if (error) {
             res.send("0");
         } else {
-            console.log("POST /user/getCartProduct")
             res.send(JSON.stringify(result.cart));
         }
     });
@@ -349,7 +366,6 @@ app.post("/deletefromcart", function (req, res) {
             res.send("0");
         } else {
             req.session.data.totalincart = req.session.data.totalincart - 1;
-            console.log("POST /user/getCartProduct")
             res.send("1");
         }
     })
@@ -363,7 +379,6 @@ app.post("/deleteuser", function (req, res) {
         if (error) {
             res.send("0");
         } else {
-            console.log("POST /user/deleteuser")
             res.send("1");
         }
     })
@@ -400,8 +415,8 @@ app.post("/buyfromcart", function (req, res) {
                             throw error;
                         else {
                             req.session.data.totalincart = 0;
-                            console.log("POST /user/buyfromcart")
-                            res.send("true");
+                            req.flash('success', 'Successfully Ordered From cart');
+                            return res.redirect('/user/ordered');
                         }
                     })
                 }
@@ -414,7 +429,8 @@ app.post("/buyfromcart", function (req, res) {
 app.get("/ordered", middleware.checkSession, middleware.checkCustomer, function (req, res) {
     res.render("orderedpage", {
         data: req.session.data,
-        shownavpro: "false"
+        shownavpro: "false",
+        success: req.flash('success')
     });
 });
 
@@ -424,7 +440,6 @@ app.get("/profile", middleware.checkSession, function (req, res) {
         _id: req.session._id
     }).
     exec(function (err, result) {
-        console.log(result);
         if (err) console.log("error");
         else {
             var add = new Object;
@@ -432,12 +447,14 @@ app.get("/profile", middleware.checkSession, function (req, res) {
             add.address2 = result.address2;
             add.state = result.state;
             add.city = result.city;
+            add.phoneno = result.phoneno;
+            add.DOB = result.DOB;
+            add.gender = add.gender;
             add.zipcode = result.zipcode;
-            console.log("POST /user/profile")
             res.render("profile", {
                 data: req.session.data,
                 shownavpro: "false",
-                address: add
+                newdata: add
             });
         }
     });
@@ -458,7 +475,6 @@ app.get("/getOrderedProduct", function (req, res) {
     exec(function (err, result) {
         if (err) console.log("error");
         else {
-            console.log("POST /user/getOrderedProduct")
             res.send(JSON.stringify(result.ordered));
         }
     });

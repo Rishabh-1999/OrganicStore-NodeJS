@@ -22,84 +22,93 @@
                             <i class="fa fa-pagelines"></i>
                         </h1>
                         <h5 class="text-center"> Register </h5>
-                        <div id="addInvalid" class="row card-title"></div>
-                        <div class="form-label-group">
-                            <label>Name</label>
-                            <input type="name" id="name" class="form-control" name="name" placeholder="Name" required
-                                autofocus />
+                        <% if (errors.length > 0) { %>
+                        <br>
+                        <div class="alert alert-danger text-center"
+                            style="width:100%;margin-left:10px;margin-right:10px;">
+                            <%= errors %>
                         </div>
-                        <div class="form-label-group">
-                            <label> Email address </label>
-                            <input type="email" id="email" class="form-control" name="email" placeholder="Email address"
-                                required autofocus />
-                        </div>
-                        <div class="form-label-group">
-                            <label> Phone No. </label>
-                            <input type="number" id="phoneno" class="form-control" name="phoneno"
-                                placeholder="Phone No." required />
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Gender</label>
-                                <select class="form-control" id="gender" name="gender" required>
-                                    <option name="Male" selected>Male</option>
-                                    <option name="Female">Female</option>
-                                    <option name="Other">Other</option>
-                                </select>
+                        <% } %>
+                        <form method="POST" action="/user/register">
+                            <div class="form-label-group">
+                                <label>Name</label>
+                                <input type="name" id="name" class="form-control" name="name" placeholder="Name"
+                                    required autofocus />
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>DOB :</label>
-                                <input class=" form-control dobDate" name="DOB" placeholder="MM/DD/YYYY" id="DOB"
-                                    type="date" autocomplete="off" required="">
+                            <div class="form-label-group">
+                                <label> Email address </label>
+                                <input type="email" id="email" class="form-control" name="email"
+                                    placeholder="Email address" required autofocus />
                             </div>
-                        </div>
-                        <div class="form-label-group">
-                            <label> Password </label>
-                            <input type="text" id="password" class="form-control" name="password" placeholder="Password"
-                                required />
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress">Address</label>
-                            <input type="text" class="form-control" id="address1" name="address1"
-                                placeholder="Adress required" required>
-                        </div>
-                        <div class=" form-group">
-                            <label for="inputAddress2">Address 2</label>
-                            <input type="text" class="form-control" id="address2" name="address2" placeholder="Address2"
-                                required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="inputCity">City</label>
-                                <input type="text" class="form-control" id="city" name="city" required>
+                            <div class="form-label-group">
+                                <label> Phone No. </label>
+                                <input type="number" id="phoneno" class="form-control" name="phoneno"
+                                    placeholder="Phone No." required />
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="inputState">State</label>
-                                <select id="state" name="state" class="form-control" required>
-                                    <option selected name="Punjab">Punjab</option>
-                                    <option name="Delhi">Delhi</option>
-                                    <option name="Chandigarh">Chandigarh</option>
-                                    <option name="Jammu&Kashmir">Jammu&Kashmir</option>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Gender</label>
+                                    <select class="form-control" id="gender" name="gender" required>
+                                        <option name="Male" selected>Male</option>
+                                        <option name="Female">Female</option>
+                                        <option name="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>DOB :</label>
+                                    <input class=" form-control dobDate" name="DOB" placeholder="MM/DD/YYYY" id="DOB"
+                                        type="date" autocomplete="off" required="">
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputZip">Zip</label>
-                                <input type="text" name="zipcode" class="form-control" id="zipcode" required>
+                            <div class="form-label-group">
+                                <label> Password </label>
+                                <input type="text" id="password" class="form-control" name="password"
+                                    placeholder="Password" required />
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check" name="checkbox">
-                                <input class="form-check-input" type="checkbox" name="check" id="checkbox" required>
-                                <label class="form-check-label" for="invalidCheck2">
-                                    Agree to terms and conditions
-                                </label>
+                            <div class="form-group">
+                                <label for="inputAddress">Address</label>
+                                <input type="text" class="form-control" id="address1" name="address1"
+                                    placeholder="Adress required" required>
                             </div>
-                        </div>
-                        <div style="margin:10px;">
-                            <button class="btn btn-lg btn-primary btn-block text-uppercase" id="submit" type="submit">
-                                Register Here
-                            </button>
-                        </div>
+                            <div class=" form-group">
+                                <label for="inputAddress2">Address 2</label>
+                                <input type="text" class="form-control" id="address2" name="address2"
+                                    placeholder="Address2" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputCity">City</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputState">State</label>
+                                    <select id="state" name="state" class="form-control" required>
+                                        <option selected name="Punjab">Punjab</option>
+                                        <option name="Delhi">Delhi</option>
+                                        <option name="Chandigarh">Chandigarh</option>
+                                        <option name="Jammu&Kashmir">Jammu&Kashmir</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="inputZip">Zip</label>
+                                    <input type="text" name="zipcode" class="form-control" id="zipcode" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check" name="checkbox">
+                                    <input class="form-check-input" type="checkbox" name="check" id="checkbox" required>
+                                    <label class="form-check-label" for="invalidCheck2">
+                                        Agree to terms and conditions
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="margin:10px;">
+                                <button class="btn btn-lg btn-primary btn-block text-uppercase" id="submit"
+                                    type="submit">
+                                    Register Here
+                                </button>
+                            </div>
+                        </form>
                         <hr class="md-4" />
                     </div>
                 </div>
@@ -107,7 +116,6 @@
         </div>
     </div>
 
-    <script src="../js/register-js.js"></script>
     <script href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 
