@@ -1,9 +1,11 @@
 var friutDIV = document.getElementById("fruitDIV");
 var juiceDIV = document.getElementById("juiceDIV");
 var vegetableDIV = document.getElementById("vegetableDIV");
+var cart_n = document.getElementById("cart_n");
+var cartno;
 
 function HTMLfruitProduct(con) {
-    let URL = '.' + con.imgloc;
+    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
@@ -25,7 +27,7 @@ function HTMLfruitProduct(con) {
 }
 
 function HTMLjuiceProduct(con) {
-    let URL = '.' + con.imgloc;
+    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
@@ -47,7 +49,7 @@ function HTMLjuiceProduct(con) {
 }
 
 function HTMLvegetableProduct(con) {
-    let URL = '.' + con.imgloc;
+    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
@@ -71,53 +73,75 @@ function HTMLvegetableProduct(con) {
 function addTocart(id) {
     var xml = new XMLHttpRequest();
     xml.open("POST", "/user/addToCart");
-    xml.addEventListener('load', function () {
+    xml.addEventListener("load", function () {
         var data = xml.responseText;
-        if (data == "1") {
-            $("#orderedModal-content").text("Added To Cart");
-            $("#orderedModal-header").css("background-color", "forestgreen");
-        } else {
-            $("#orderedModal-content").text("Failed To Add in Cart");
-            $("#orderedModal-header").css("background-color", "red");
-        }
-        $("#orderedModal").modal();
-    })
+        cartno++;
+        cart_n.innerHTML = "[" + cartno + "]";
+        if (data == "1")
+            animatecart(1);
+        else
+            animatecart(0);
+    });
     xml.setRequestHeader("Content-Type", "application/json");
-    xml.send(JSON.stringify({
-        _id: id,
-        quantity: document.getElementById("no" + id).value
-    }));
+    xml.send(
+        JSON.stringify({
+            _id: id,
+            quantity: document.getElementById("no" + id).value
+        })
+    );
+}
+
+function animatecart(i) {
+    const toast = swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000
+    });
+    if (i == 1)
+        toast.fire({
+            type: 'success',
+            icon: 'success',
+            title: "Added to Cart"
+        });
+    else
+        toast.fire({
+            type: 'warning',
+            icon: 'warning',
+            title: "Failed to add in Cart"
+        });
 }
 
 (() => {
+    var str = cart_n.innerHTML;
+    cartno = parseInt(str.substring(2, str.length - 2));
+    console.log(str)
+    console.log(cartno)
     $.ajax({
-            url: "/products/getFruits",
-            dataType: "json",
-            async: true
-        })
-        .done(function (data) {
-            for (var index = 0; index < data.length; index++) {
-                friutDIV.innerHTML += `${HTMLfruitProduct(data[index])}`;
-            }
-        });
+        url: "/products/getFruits",
+        dataType: "json",
+        async: true
+    }).done(function (data) {
+        for (var index = 0; index < data.length; index++) {
+            friutDIV.innerHTML += `${HTMLfruitProduct(data[index])}`;
+        }
+    });
 
     $.ajax({
-            url: "/products/getJuice",
-            dataType: "json"
-        })
-        .done(function (data) {
-            for (var index = 0; index < data.length; index++) {
-                juiceDIV.innerHTML += `${HTMLjuiceProduct(data[index])}`;
-            }
-        });
+        url: "/products/getJuice",
+        dataType: "json"
+    }).done(function (data) {
+        for (var index = 0; index < data.length; index++) {
+            juiceDIV.innerHTML += `${HTMLjuiceProduct(data[index])}`;
+        }
+    });
 
     $.ajax({
-            url: "/products/getVegetable",
-            dataType: "json"
-        })
-        .done(function (data) {
-            for (var index = 0; index < data.length; index++) {
-                vegetableDIV.innerHTML += `${HTMLvegetableProduct(data[index])}`;
-            }
-        });
-})()
+        url: "/products/getVegetable",
+        dataType: "json"
+    }).done(function (data) {
+        for (var index = 0; index < data.length; index++) {
+            vegetableDIV.innerHTML += `${HTMLvegetableProduct(data[index])}`;
+        }
+    });
+})();
