@@ -63,7 +63,8 @@ app.get("/", function (req, res) {
     req.session.isLogin = 0;
   }
   res.render("login", {
-    errors: req.flash('errors')
+    errors: req.flash('errors'),
+    success: req.flash('success')
   });
 });
 
@@ -100,6 +101,14 @@ app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (
   res
 ) {
   res.render("adminpage", {
+    data: req.session.data,
+    shownavpro: "false"
+  });
+});
+
+/* GET seller's Page */
+app.get("/sellerpage", middleware.checkSession, middleware.checkSeller, function (req, res) {
+  res.render("sellerpage", {
     data: req.session.data,
     shownavpro: "false"
   });

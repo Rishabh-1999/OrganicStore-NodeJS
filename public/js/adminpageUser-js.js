@@ -81,6 +81,7 @@ function deleteuser(id) {
         })
         .done(function (data) {
             $('#deletedmodal').modal('show');
+            table.ajax.reload(null, false);
         });
 }
 

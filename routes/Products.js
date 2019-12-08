@@ -3,10 +3,6 @@ const path = require('path');
 var bodyParser = require('body-parser')
 const app = express.Router();
 const multer = require('multer');
-var passport = require('passport');
-var mongojs = require('mongojs')
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -16,61 +12,26 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
+// Models
 var producttable = require("../models/products");
+
+// Middleware
 var middleware = require('../middleware/middleware');
 
+// Controllers
+var controllers = require('../controllers');
+
 /* GET get Fruit Product */
-app.get("/getFruits", middleware.checkSession, function (req, res) {
-    producttable
-        .find({
-            category: "Fruits"
-        })
-        .exec(function (error, result) {
-            if (error) throw error;
-            else {
-                res.send(result);
-            }
-        });
-});
+app.get("/getAllFruits", middleware.checkSession, controllers.product.getAllFruits);
 
 /* GET get Juice Product */
-app.get("/getJuice", middleware.checkSession, function (req, res) {
-    producttable
-        .find({
-            category: "Juice"
-        })
-        .exec(function (error, result) {
-            if (error) throw error;
-            else
-                res.send(result);
-        });
-});
+app.get("/getAllJuice", middleware.checkSession, controllers.product.getAllJuice);
 
 /* GET get Vegetable Product */
-app.get("/getVegetable", middleware.checkSession, function (req, res) {
-    producttable
-        .find({
-            category: "Vegetable"
-        })
-        .exec(function (error, result) {
-            if (error) throw error;
-            else
-                res.send(result);
-        });
-});
+app.get("/getAllVegetable", middleware.checkSession, controllers.product.getAllVegetable);
 
 /* GET get Seller's selling product */
-app.get("/getSellerProduct", middleware.checkSession, middleware.checkSeller, function (req, res) {
-    producttable
-        .find({
-            sellercompany: req.session.name
-        })
-        .exec(function (error, result) {
-            if (error) throw error;
-            else
-                res.send(result);
-        });
-});
+app.get("/getSellerProduct", middleware.checkSession, middleware.checkSeller, controllers.product.getSellerProduct);
 
 /* MULTER */
 var storage = multer.diskStorage({
@@ -88,18 +49,18 @@ var upload = multer({
 }).single('productphoto');
 
 /* POST Add Product */
-app.post('/addproduct', middleware.checkSession, middleware.checkSeller, (req, res) => {
+app.post('/addproduct', middleware.checkSession, middleware.checkSeller, upload, (req, res) => {
+    let newProduct = new producttable({
+        "name": req.body.productname,
+        "category": req.body.category,
+        "price": req.body.price,
+        "imgloc": './img/' + req.body.category + '/' + req.file.filename,
+        "sellercompany": req.session.name
+    })
     upload(req, res, (err) => {
         if (err) {
             throw err;
         } else {
-            let newProduct = new producttable({
-                "name": req.body.productname,
-                "category": req.body.category,
-                "price": req.body.price,
-                "imgloc": './img/' + req.body.category + '/' + req.file.filename,
-                "sellercompany": req.session.name
-            })
             newProduct.save()
                 .then(data => {
                     res.writeHead(200, {
@@ -116,108 +77,9 @@ app.post('/addproduct', middleware.checkSession, middleware.checkSeller, (req, r
 })
 
 /* POST get Product for Table */
-app.post('/getProductTable', middleware.checkSession, middleware.checkAdmin, function (req, res) {
-    let query = {};
-    let params = {};
-
-    if (req.body.search.value) {
-        query["$or"] = [{
-                "name": {
-                    "$regex": req.body.search.value,
-                    "$options": "i"
-                }
-            },
-            {
-                "price": {
-                    "$regex": req.body.search.value,
-                    "$options": "i"
-                }
-            },
-            {
-                "sellercompany": {
-                    "$regex": req.body.search.value,
-                    "$options": "i"
-                }
-            }
-        ]
-    }
-
-    let sortingType;
-    if (req.body.order[0].dir === 'asc')
-        sortingType = 1;
-    else
-        sortingType = -1;
-
-    if (req.body.order[0].column === '0')
-        params = {
-            skip: parseInt(req.body.start),
-            limit: parseInt(req.body.length),
-            sort: {
-                name: sortingType
-            }
-        };
-    else if (req.body.order[0].column === '2')
-        params = {
-            skip: parseInt(req.body.start),
-            limit: parseInt(req.body.length),
-            sort: {
-                price: sortingType
-            }
-        };
-    else if (req.body.order[0].column === '3')
-        params = {
-            skip: parseInt(req.body.start),
-            limit: parseInt(req.body.length),
-            sort: {
-                sellercompany: sortingType
-            }
-        };
-
-    producttable.find(query, {}, params, function (err, data) {
-        if (err)
-            console.log(err);
-        else {
-            producttable.countDocuments(query, function (err, filteredCount) {
-                if (err)
-                    console.log(err);
-                else {
-                    producttable.countDocuments(function (err, totalCount) {
-                        if (err)
-                            console.log(err);
-                        else {
-                            res.send({
-                                "recordsTotal": totalCount,
-                                "recordsFiltered": filteredCount,
-                                data
-                            });
-                        }
-                    })
-                }
-            });
-        }
-    });
-});
+app.post('/getProductTable', middleware.checkSession, middleware.checkAdmin, controllers.product.getProductTable);
 
 /* POST delete Product */
-app.post("/deleteproduct", middleware.checkSession, middleware.checkAdmin, function (req, res) {
-    producttable.deleteOne({
-        "_id": req.body._id
-    }, function (error, result) {
-        if (error) {
-            console.log(error);
-            res.send("0");
-        } else {
-            res.send("1");
-        }
-    })
-});
-
-/* GET seller's Page */
-app.get("/sellerpage", middleware.checkSession, middleware.checkSeller, function (req, res) {
-    res.render("sellerpage", {
-        data: req.session.data,
-        shownavpro: "false"
-    });
-});
+app.post("/deleteproduct", middleware.checkSession, middleware.checkAdmin, controllers.product.deleteproduct);
 
 module.exports = app

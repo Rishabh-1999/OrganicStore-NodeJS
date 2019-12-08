@@ -118,7 +118,7 @@ function animatecart(i) {
     console.log(str)
     console.log(cartno)
     $.ajax({
-        url: "/products/getFruits",
+        url: "/products/getAllFruits",
         dataType: "json",
         async: true
     }).done(function (data) {
@@ -128,7 +128,7 @@ function animatecart(i) {
     });
 
     $.ajax({
-        url: "/products/getJuice",
+        url: "/products/getAllJuice",
         dataType: "json"
     }).done(function (data) {
         for (var index = 0; index < data.length; index++) {
@@ -137,7 +137,7 @@ function animatecart(i) {
     });
 
     $.ajax({
-        url: "/products/getVegetable",
+        url: "/products/getAllVegetable",
         dataType: "json"
     }).done(function (data) {
         for (var index = 0; index < data.length; index++) {
