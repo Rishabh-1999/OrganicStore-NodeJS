@@ -3,17 +3,11 @@ var session = require("express-session");
 var mongoStore = require("connect-mongo")(session);
 var bodyParser = require("body-parser");
 const path = require("path");
-const exphbs = require("express-handlebars");
 var favicon = require("serve-favicon");
 var mongoose = require("mongoose");
-var ejs = require('ejs');
 var engine = require('ejs-mate');
-const bodyparser = require("body-parser");
 var morgan = require("morgan");
 var flash = require("express-flash");
-
-var bcrypt = require("bcrypt");
-const saltRounds = 10;
 
 var app = express();
 
@@ -49,9 +43,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(flash());
 
-/* Required Model */
-var producttable = require("./models/products");
-var Users = require("./models/Users");
+/* Middleware */
 var middleware = require("./middleware/middleware");
 
 /* Routing Implementation */
