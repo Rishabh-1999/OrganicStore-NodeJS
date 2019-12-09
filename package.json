@@ -1,5 +1,5 @@
 {
-  "name": "OrganicStore-NodeJS",
+  "name": "organicstore-nodejs",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -19,14 +19,18 @@
   "homepage": "https://github.com/Rishabh-1999/OrganicStore-NodeJS#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "connect-flash": "^0.1.1",
+    "connect-mongo": "^3.2.0",
     "dateformat": "^3.0.3",
     "ejs-mate": "^3.0.0",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
-    "mongoose": "^5.7.7",
+    "express-session": "^1.17.0",
+    "mongoose": "^5.7.14",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
-    "serve-favicon": "^2.5.0"
-  }
+    "path": "^0.12.7",
+    "serve-favicon": "^2.5.0",
+    "snyk": "^1.258.1"
+  },
+  "devDependencies": {}
 }
