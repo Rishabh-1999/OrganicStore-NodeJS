@@ -12,7 +12,7 @@ var flash = require("express-flash");
 var app = express();
 
 /* DB */
-require("./models/db");
+require("./static/db");
 
 app.use(morgan("dev"));
 

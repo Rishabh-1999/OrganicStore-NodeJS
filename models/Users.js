@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var products = require('./products');
+var products = require("./products");
 
 var Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId;
@@ -23,7 +23,8 @@ var loginSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    select: false
   },
   DOB: {
     type: String,
@@ -59,31 +60,38 @@ var loginSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  totalincart: Number,
-  cart: [{
-    productdata: {
-      'type': mongoose.Schema.Types.ObjectId,
-      'ref': products
-    },
-    date: {
-      type: String,
-      trim: true,
-      default: ''
-    },
-    quantity: Number
-  }],
-  ordered: [{
-    productdata: {
-      'type': mongoose.Schema.Types.ObjectId,
-      'ref': products
-    },
-    date: {
-      type: String,
-      trim: true,
-      default: ''
-    },
-    quantity: Number
-  }]
+  totalincart: {
+    type: Number,
+    default: 0
+  },
+  cart: [
+    {
+      productdata: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: products
+      },
+      date: {
+        type: String,
+        trim: true,
+        default: ""
+      },
+      quantity: Number
+    }
+  ],
+  ordered: [
+    {
+      productdata: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: products
+      },
+      date: {
+        type: String,
+        trim: true,
+        default: ""
+      },
+      quantity: Number
+    }
+  ]
 });
 
 var logins = mongoose.model("loginusers", loginSchema);

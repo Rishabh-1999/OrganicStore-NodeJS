@@ -105,7 +105,7 @@ exports.changepassword = async function (query, req, res) {
                 });
             }
         }
-    });
+    }).select("+password");
 }
 
 exports.register = async function (query, req, res) {
@@ -190,7 +190,7 @@ exports.checkLogin = async function (query, req, res) {
                 return res.redirect('/');
             }
         }
-    ).catch(err => {
+    ).select("+password").catch(err => {
         res.send(error);
     });
 }
