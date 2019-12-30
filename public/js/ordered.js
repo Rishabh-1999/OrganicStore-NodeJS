@@ -5,7 +5,7 @@ function tableHTML(data, quantity, ordereddate) {
     return `
         <tr>
             <td scope="row" class="text-center">${data._id}</td>
-            <td><img class="text-center" style="width:90px;" src=".${data.imgloc}"></td>
+            <td><img class="text-center" style="width:90px;" src="${data.imgloc}"></td>
             <td class="text-center">${data.name}</td>
             <td class="text-center">${quantity}</td>
             <td class="text-center">${data.price}</td>
