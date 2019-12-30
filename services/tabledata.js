@@ -87,7 +87,6 @@ exports.getProductTable = async function (query1, req, res) {
 exports.getUserTable = async function (query1, req, res) {
     let query = {};
     let params = {};
-    console.log(req.body)
 
     if (req.body.search.value) {
         query["$or"] = [{

@@ -1,0 +1,17 @@
+[{
+    "_id": "NqaqZztOiHu8TpbkAJ7onhKzMBIFhk01",
+    "expires": {
+        "$date": {
+            "$numberLong": "1578668653311"
+        }
+    },
+    "session": "{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"isLogin\":0,\"_id\":\"5dc3cc20b9fa5f3f9c7ec014\",\"name\":\"Rishabh Anand\",\"password\":\"125398\",\"data\":{\"name\":\"Rishabh Anand\",\"_id\":\"5dc3cc20b9fa5f3f9c7ec014\",\"email\":\"rishabhanand33@gmail.com\",\"gender\":\"Male\",\"city\":\"ZIRAKPUR\",\"DOB\":\"1998-11-15\",\"totalincart\":0,\"phoneno\":\"8872947307\",\"type\":\"Customer\"}}"
+}, {
+    "_id": "mmXFtnomys8oZj1SExapzUJw8qvIuS6B",
+    "expires": {
+        "$date": {
+            "$numberLong": "1578734355981"
+        }
+    },
+    "session": "{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"isLogin\":0,\"_id\":\"5dc3cc20b9fa5f3f9c7ec014\",\"name\":\"Rishabh Anand\",\"password\":\"125398\",\"data\":{\"name\":\"Rishabh Anand\",\"_id\":\"5dc3cc20b9fa5f3f9c7ec014\",\"email\":\"rishabhanand33@gmail.com\",\"gender\":\"Male\",\"city\":\"ZIRAKPUR\",\"DOB\":\"1998-11-15\",\"totalincart\":1,\"phoneno\":\"8872947307\",\"type\":\"Customer\"}}"
+}]

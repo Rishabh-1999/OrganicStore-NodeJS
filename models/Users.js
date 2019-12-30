@@ -64,34 +64,30 @@ var loginSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  cart: [
-    {
-      productdata: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: products
-      },
-      date: {
-        type: String,
-        trim: true,
-        default: ""
-      },
-      quantity: Number
-    }
-  ],
-  ordered: [
-    {
-      productdata: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: products
-      },
-      date: {
-        type: String,
-        trim: true,
-        default: ""
-      },
-      quantity: Number
-    }
-  ]
+  cart: [{
+    productdata: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products"
+    },
+    date: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+    quantity: Number
+  }],
+  ordered: [{
+    productdata: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products"
+    },
+    date: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+    quantity: Number
+  }]
 });
 
 var logins = mongoose.model("loginusers", loginSchema);

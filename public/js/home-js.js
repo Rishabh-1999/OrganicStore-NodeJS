@@ -5,11 +5,10 @@ var cart_n = document.getElementById("cart_n");
 var cartno;
 
 function HTMLfruitProduct(con) {
-    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
-        <img class="card-img-top" style="height:16rem;" src="${URL}" alt="Card image cap">
+        <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
             <div class="card-body">
                 <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
                 <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
@@ -27,11 +26,10 @@ function HTMLfruitProduct(con) {
 }
 
 function HTMLjuiceProduct(con) {
-    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-            <img class="card-img-top" style="height:16rem;" src="${URL}" alt="Card image cap">
+            <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
                 <div class="card-body">
                     <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
                     <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
@@ -49,11 +47,10 @@ function HTMLjuiceProduct(con) {
 }
 
 function HTMLvegetableProduct(con) {
-    let URL = "." + con.imgloc;
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
-        <img class="card-img-top" style="height:16rem;" src="${URL}" alt="Card image cap">
+        <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
             <div class="card-body">
                 <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
                 <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
@@ -115,8 +112,6 @@ function animatecart(i) {
 (() => {
     var str = cart_n.innerHTML;
     cartno = parseInt(str.substring(2, str.length - 2));
-    console.log(str)
-    console.log(cartno)
     $.ajax({
         url: "/products/getAllFruits",
         dataType: "json",

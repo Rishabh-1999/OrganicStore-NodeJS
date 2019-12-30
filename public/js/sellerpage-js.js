@@ -1,11 +1,10 @@
 var productDIV = document.getElementById("productDIV");
 
 function HTMLproduct(con) {
-    let URL = '.' + con.imgloc;
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
-        <img class="card-img-top" style="height:16rem;" src="${URL}" alt="Card image cap">
+        <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
             <div class="card-body">
                 <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
                 <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>

@@ -13,8 +13,7 @@ var productSchema = new mongoose.Schema({
     },
     price: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     imgloc: {
         type: String,

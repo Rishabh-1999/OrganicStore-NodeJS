@@ -13,7 +13,6 @@ exports.getOrderedProduct = async function (query) {
 exports.getCartProduct = async function (query) {
     try {
         var d = await Users.findOne(query).populate('cart.productdata');
-        console.log(d);
         return d;
     } catch (e) {
         throw Error('Error get Vegetable Details')

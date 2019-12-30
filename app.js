@@ -8,8 +8,9 @@ var mongoose = require("mongoose");
 var engine = require('ejs-mate');
 var morgan = require("morgan");
 var flash = require("express-flash");
-
+require("dotenv").config();
 var app = express();
+var PORT = process.env.PORT || 3000;
 
 /* DB */
 require("./static/db");
@@ -161,6 +162,7 @@ app.get("/logout", middleware.checkSession, function (req, res) {
   console.log("logouted");
 });
 
-app.listen(3000, () => {
-  console.log("Sever on port: 3000");
+app.listen(PORT, () => {
+  console.log("Sever on port: " +
+    PORT);
 });

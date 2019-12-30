@@ -16,7 +16,7 @@ exports.getProfile = async function (query, req, res) {
     Users.findOne({
         "_id": req.session._id
     }).exec(function (err, result) {
-        if (err) console.log("error");
+        if (err) console.log(err);
         else {
             var add = new Object;
             add.address1 = result.address1;
@@ -109,7 +109,6 @@ exports.changepassword = async function (query, req, res) {
 }
 
 exports.register = async function (query, req, res) {
-    console.log("reg")
     Users.findOne({
         email: req.body.email
     }, function (err, result) {
