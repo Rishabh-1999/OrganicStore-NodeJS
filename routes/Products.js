@@ -86,7 +86,6 @@ app.post(
     middleware.checkSeller,
     function (req, res) {
         const file = req.files.productphoto;
-        console.log(file);
         var reqpath =
             "organicstore/" + req.body.category + "/" + req.body.productname;
         cloundinary.uploader.upload(
