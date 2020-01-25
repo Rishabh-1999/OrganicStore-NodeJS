@@ -6,11 +6,13 @@ npm start or node app.js
 ```
 It will run under the url http://127.0.0.1:3000/
 
-Customer :
+Email and Password for Online Website:
+Customer:
 Email Id: user@gmail.com
 Password: user
 
-Seller : tata@gmail.com
+Seller   :
+Email    :tata@gmail.com
 Password: tata
 
 Pre-requisites
