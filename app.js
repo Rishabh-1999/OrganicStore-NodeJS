@@ -53,7 +53,7 @@ var middleware = require("./middleware/middleware");
 app.use("/user", require("./routes/Users"));
 app.use("/products", require("./routes/Products"));
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   if (req.session.isLogin) {
     req.session.isLogin = 0;
   }
@@ -63,13 +63,13 @@ app.get("/", function(req, res) {
   });
 });
 
-app.get("/register", function(req, res) {
+app.get("/register", function (req, res) {
   res.render("register", {
     errors: req.flash("errors")
   });
 });
 
-app.get("/home", middleware.checkSession, function(req, res) {
+app.get("/home", middleware.checkSession, function (req, res) {
   if (req.session.data.type == "Customer")
     res.render("home", {
       data: req.session.data,
@@ -91,7 +91,7 @@ app.get("/home", middleware.checkSession, function(req, res) {
     });
 });
 
-app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function(
+app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (
   req,
   res
 ) {
@@ -106,7 +106,7 @@ app.get(
   "/sellerpage",
   middleware.checkSession,
   middleware.checkSeller,
-  function(req, res) {
+  function (req, res) {
     res.render("sellerpage", {
       data: req.session.data,
       shownavpro: "false"
@@ -118,7 +118,7 @@ app.get(
   "/adminpageUser",
   middleware.checkSession,
   middleware.checkAdmin,
-  function(req, res) {
+  function (req, res) {
     res.render("adminpageUser", {
       data: req.session.data,
       shownavpro: "false"
@@ -130,7 +130,7 @@ app.get(
   "/adminpageProduct",
   middleware.checkSession,
   middleware.checkAdmin,
-  function(req, res) {
+  function (req, res) {
     res.render("adminpageProduct", {
       data: req.session.data,
       shownavpro: "false"
@@ -142,7 +142,7 @@ app.get(
   "/user/cart",
   middleware.checkSession,
   middleware.checkCustomer,
-  function(req, res) {
+  function (req, res) {
     res.render("cartpage", {
       data: req.session.data,
       shownavpro: "false",
@@ -151,7 +151,7 @@ app.get(
   }
 );
 
-app.get("/user/changepasswordpage", middleware.checkSession, function(
+app.get("/user/changepasswordpage", middleware.checkSession, function (
   req,
   res
 ) {
@@ -163,7 +163,7 @@ app.get("/user/changepasswordpage", middleware.checkSession, function(
   });
 });
 
-app.get("/logout", middleware.checkSession, function(req, res) {
+app.get("/logout", middleware.checkSession, function (req, res) {
   req.session.destroy();
   res.render("login");
   console.log("logouted");
