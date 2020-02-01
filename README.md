@@ -17,24 +17,22 @@ Password: tata<br>
 
 Pre-requisites
 --------------
-
 - Node JS (Tested on v12.14.0)
 - Mongoose
 - Pre-requisites or Dependencies(Below)
 
 Role
 ------
-Markup : * Admin or Root
-              * See all Product and Remove Product
-              * See all Users(Seller or Customer) and Remove them
-          * Seller
-              * Ability to add New Product
-              * Common Features (Change Password etc.)
-          * Customer
-              * See all Product available from Seller
-              * Ability to add Product in Cart
-              * Ability to order Product
-
+- Admin or Root
+  - See all Product and Remove Product
+  - See all Users(Seller or Customer) and Remove them
+- Seller
+  - Ability to add New Product
+  - Common Features (Change Password etc.)
+- Customer
+  - See all Product available from Seller
+  - Ability to add Product in Cart
+  - Ability to order Product
 
 Schema
 ------
