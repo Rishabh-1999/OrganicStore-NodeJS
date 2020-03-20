@@ -1,9 +1,6 @@
 var mongoose = require("mongoose");
 var products = require("./products");
 
-var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId;
-
 var loginSchema = new mongoose.Schema({
   name: {
     type: String,

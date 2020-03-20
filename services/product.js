@@ -2,8 +2,7 @@ var product = require('../models/products');
 
 exports.getFruits = async function (query) {
     try {
-        var details = await product.find(query)
-        return details;
+        return await product.find(query);
     } catch (e) {
         throw Error('Error get Fruit Details')
     }
@@ -11,8 +10,7 @@ exports.getFruits = async function (query) {
 
 exports.getJuice = async function (query) {
     try {
-        var details = await product.find(query)
-        return details;
+        return await product.find(query)
     } catch (e) {
         throw Error('Error get Juice Details')
     }
@@ -20,8 +18,7 @@ exports.getJuice = async function (query) {
 
 exports.getVegetable = async function (query) {
     try {
-        var details = await product.find(query)
-        return details;
+        return await product.find(query);
     } catch (e) {
         throw Error('Error get Vegetable Details')
     }

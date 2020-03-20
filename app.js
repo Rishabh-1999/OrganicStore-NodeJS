@@ -8,30 +8,42 @@ var mongoose = require("mongoose");
 var engine = require("ejs-mate");
 var morgan = require("morgan");
 var flash = require("express-flash");
+const passport = require("passport");
+
 require("dotenv").config();
+
 var app = express();
+
+// Passport Config
+require("./config/passport")(passport);
+
 var http = require("http");
 var server = http.Server(app);
 var PORT = process.env.PORT || 3000;
 
 /* DB */
-require("./static/db");
+require("./config/db");
 
 app.use(morgan("dev"));
 
-var db = mongoose.connection;
-
 /* Session */
 app.use(
-  session({
+  require("express-session")({
     secret: "abcUCAChitkara",
-    resave: true,
     saveUninitialized: true,
+    resave: true,
     store: new mongoStore({
-      mongooseConnection: db
-    })
+      mongooseConnection: mongoose.connection
+    }),
+    cookie: {
+      secure: false
+    }
   })
 );
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(favicon(path.join(__dirname, "public//img/", "logo.ico")));
 app.use(express.static(path.join(__dirname, "public")));
@@ -54,8 +66,8 @@ app.use("/user", require("./routes/Users"));
 app.use("/products", require("./routes/Products"));
 
 app.get("/", function (req, res) {
-  if (req.session.isLogin) {
-    req.session.isLogin = 0;
+  if (req.isAuthenticated()) {
+    req.logout();
   }
   res.render("login", {
     errors: req.flash("errors"),
@@ -70,22 +82,23 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/home", middleware.checkSession, function (req, res) {
-  if (req.session.data.type == "Customer")
+  //console.log(req.session)
+  if (req.session.passport.user.type == "Customer")
     res.render("home", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "true",
       success: req.flash("success"),
       errors: req.flash("errors")
     });
-  else if (req.session.data.type == "Seller")
+  else if (req.session.passport.user.type == "Seller")
     res.render("sellerpage", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false",
       success: req.flash("success")
     });
-  else if (req.session.data.type == "Admin")
+  else if (req.session.passport.user.type == "Admin")
     res.render("adminpage", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false",
       success: req.flash("success")
     });
@@ -96,7 +109,7 @@ app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (
   res
 ) {
   res.render("adminpage", {
-    data: req.session.data,
+    data: req.session.passport.user,
     shownavpro: "false"
   });
 });
@@ -108,7 +121,7 @@ app.get(
   middleware.checkSeller,
   function (req, res) {
     res.render("sellerpage", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false"
     });
   }
@@ -120,7 +133,7 @@ app.get(
   middleware.checkAdmin,
   function (req, res) {
     res.render("adminpageUser", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false"
     });
   }
@@ -132,7 +145,7 @@ app.get(
   middleware.checkAdmin,
   function (req, res) {
     res.render("adminpageProduct", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false"
     });
   }
@@ -144,7 +157,7 @@ app.get(
   middleware.checkCustomer,
   function (req, res) {
     res.render("cartpage", {
-      data: req.session.data,
+      data: req.session.passport.user,
       shownavpro: "false",
       success: req.flash("success")
     });
@@ -156,7 +169,7 @@ app.get("/user/changepasswordpage", middleware.checkSession, function (
   res
 ) {
   res.render("changepasswordpage", {
-    data: req.session.data,
+    data: req.session.passport.user,
     shownavpro: "false",
     success: req.flash("success"),
     errors: req.flash("errors")

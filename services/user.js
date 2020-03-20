@@ -14,7 +14,7 @@ exports.deleteuser = async function (query) {
 
 exports.getProfile = async function (query, req, res) {
     Users.findOne({
-        "_id": req.session._id
+        "_id": req.session.passport.user._id
     }).exec(function (err, result) {
         if (err) console.log(err);
         else {
@@ -28,7 +28,7 @@ exports.getProfile = async function (query, req, res) {
             add.gender = add.gender;
             add.zipcode = result.zipcode;
             res.render("profile", {
-                data: req.session.data,
+                data: req.session.passport.user,
                 shownavpro: "false",
                 newdata: add
             });
@@ -38,7 +38,7 @@ exports.getProfile = async function (query, req, res) {
 
 exports.updateProfile = async function (query, req, res) {
     Users.updateOne({
-            "_id": req.session._id
+            "_id": req.session.passport.user._id
         }, {
             $set: {
                 "name": req.body.name,
@@ -58,18 +58,18 @@ exports.updateProfile = async function (query, req, res) {
             } else {
                 req.flash('success', 'Profile Updated');
             }
-            if (req.session.data.type == "Customer")
+            if (req.session.passport.user.type == "Customer")
                 return res.redirect('/home');
-            else if (req.session.data.type == "Seller")
+            else if (req.session.passport.user.type == "Seller")
                 return res.redirect('/sellerpage');
-            else if (req.session.data.type == "Admin")
+            else if (req.session.passport.user.type == "Admin")
                 return res.redirect('/adminpage');
         })
 }
 
 exports.changepassword = async function (query, req, res) {
     Users.findOne({
-        "_id": req.session._id
+        "_id": req.session.passport.user._id
     }, function (error, result) {
         if (error)
             throw error;
@@ -81,7 +81,7 @@ exports.changepassword = async function (query, req, res) {
                     if (boolans == true) {
                         bcrypt.hash(req.body.newpass, saltRounds, function (err, newpass) {
                             Users.updateOne({
-                                "_id": req.session._id,
+                                "_id": req.session.passport.user._id,
                             }, {
                                 $set: {
                                     "password": newpass
@@ -145,51 +145,4 @@ exports.register = async function (query, req, res) {
             });
         }
     })
-}
-
-exports.checkLogin = async function (query, req, res) {
-    Users.findOne({
-            email: req.body.email
-        },
-        function (err, result) {
-            if (result) {
-                bcrypt.compare(req.body.password, result.password, function (
-                    err,
-                    password
-                ) {
-                    if (password) {
-                        req.session.isLogin = 1;
-                        req.session._id = result._id;
-                        req.session.name = result.name;
-                        req.session.password = req.body.password;
-                        var ob = new Object();
-                        ob.name = result.name;
-                        ob._id = result._id;
-                        ob.email = result.email;
-                        ob.gender = result.gender;
-                        ob.city = result.city;
-                        ob.DOB = result.DOB;
-                        ob.totalincart = result.totalincart;
-                        ob.phoneno = result.phoneno;
-                        ob.type = result.type;
-                        req.session.name = result.name;
-                        req.session.data = ob;
-                        console.log("-------------------Logined--------------------")
-                        if (req.session.data.type == "Customer") res.redirect('/home');
-                        else if (req.session.data.type == "Admin") res.redirect("/adminpage");
-                        else if ((req.session.data.type = "Seller"))
-                            res.redirect("/sellerpage");
-                    } else {
-                        req.flash('errors', 'Username/Password Incorrect.');
-                        return res.redirect('/');
-                    }
-                });
-            } else {
-                req.flash('errors', 'Username/Password Incorrect.');
-                return res.redirect('/');
-            }
-        }
-    ).select("+password").catch(err => {
-        res.send(error);
-    });
 }

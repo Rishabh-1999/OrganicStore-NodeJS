@@ -101,7 +101,7 @@ app.post(
                             category: req.body.category,
                             price: req.body.price,
                             imgloc: result.url,
-                            sellercompany: req.session.name
+                            sellercompany: req.session.passport.user.name
                         })
                         .save()
                         .then(data => {
@@ -114,30 +114,6 @@ app.post(
                 }
             }
         );
-        // let newProduct = new producttable({
-        //     "name": req.body.productname,
-        //     "category": req.body.category,
-        //     "price": req.body.price,
-        //     "imgloc": './img/' + req.body.category + '/' + req.file.filename,
-        //     "sellercompany": req.session.name
-        // })
-        // upload(req, res, (err) => {
-        //     if (err) {
-        //         throw err;
-        //     } else {
-        //         newProduct.save()
-        //             .then(data => {
-        //                 res.writeHead(200, {
-        //                     'Content-Type': 'text/html'
-        //                 });
-        //                 res.write('<script>window.location= "/sellerpage"</script>');
-        //                 res.end();
-        //             })
-        //             .catch(err => {
-        //                 console.log(err)
-        //             })
-        //     }
-        // })
     }
 );
 

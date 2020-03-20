@@ -1,26 +1,28 @@
+const passport = require("../config/passport");
+
 function checkSession(req, res, next) {
-    if (req.session.isLogin)
+    if (req.isAuthenticated())
         next();
     else
         res.redirect('/');
 }
 
 function checkCustomer(req, res, next) {
-    if (req.session.data.type == "Customer")
+    if (req.session.passport.user.type == "Customer")
         next();
     else
         res.redirect('/');
 }
 
 function checkAdmin(req, res, next) {
-    if (req.session.data.type == "Admin")
+    if (req.session.passport.user.type == "Admin")
         next();
     else
         res.redirect('/');
 }
 
 function checkSeller(req, res, next) {
-    if (req.session.data.type == "Seller")
+    if (req.session.passport.user.type == "Seller")
         next();
     else
         res.redirect('/');

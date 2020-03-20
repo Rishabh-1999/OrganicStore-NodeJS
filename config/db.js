@@ -1,19 +1,16 @@
 const mongoose = require("mongoose");
-var mongoDB = process.env.DB_MONGO;
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
 mongoose.set("useCreateIndex", true);
 
 mongoose.connect(
-  mongoDB, {
+  process.env.DB_MONGO, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   },
   err => {
-    if (!err) {
+    if (!err)
       console.log("MongoDB connected");
-    } else {
-      console.log("Error: " + err);
-    }
+    else
+      console.log("Error in Connecting to Database: " + err);
   }
 );

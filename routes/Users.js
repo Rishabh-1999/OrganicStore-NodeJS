@@ -12,10 +12,6 @@ app.use(
 // parse application/json
 app.use(bodyParser.json());
 
-// Models
-var producttable = require("../models/products");
-var Users = require("../models/Users");
-
 // Middleware
 var middleware = require("../middleware/middleware");
 
@@ -57,7 +53,7 @@ app.post("/buyfromcart", middleware.checkSession, controllers.userproduct.buyfro
 /* GET get user's ordered data */
 app.get("/ordered", middleware.checkSession, middleware.checkCustomer, function (req, res) {
     res.render("orderedpage", {
-        data: req.session.data,
+        data: req.session.passport.user,
         shownavpro: "false",
         success: req.flash('success')
     });
@@ -68,7 +64,7 @@ app.get("/profile", middleware.checkSession, controllers.users.getProfile);
 
 app.get("/addproductpage", middleware.checkSession, middleware.checkSeller, function (req, res) {
     res.render("addproductpage", {
-        data: req.session.data,
+        data: req.session.passport.user,
         shownavpro: "false"
     });
 });
