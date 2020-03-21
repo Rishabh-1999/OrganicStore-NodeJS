@@ -1,9 +1,10 @@
 var services = require('../services');
 
 module.exports.getAllFruits = async function (req, res, next) {
-    res.send(await services.product.getFruits({
+    var d = await services.product.getFruits({
         category: "Fruits"
-    }));
+    })
+    res.send(d);
 }
 
 module.exports.getAllJuice = async function (req, res, next) {

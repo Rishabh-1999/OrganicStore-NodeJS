@@ -35,9 +35,6 @@ app.use(
     store: new mongoStore({
       mongooseConnection: mongoose.connection
     }),
-    cookie: {
-      secure: false
-    }
   })
 );
 
@@ -66,11 +63,13 @@ app.use("/user", require("./routes/Users"));
 app.use("/products", require("./routes/Products"));
 
 app.get("/", function (req, res) {
+  var err_msg = req.flash("errors")[0]
+  //console.log(req.flash("errors"))
   if (req.isAuthenticated()) {
     req.logout();
   }
   res.render("login", {
-    errors: req.flash("errors"),
+    errors: err_msg == undefined ? [] : err_msg,
     success: req.flash("success")
   });
 });

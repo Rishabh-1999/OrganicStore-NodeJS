@@ -1,6 +1,7 @@
 const express = require("express");
 var bodyParser = require("body-parser");
 const app = express.Router();
+var passport = require("passport")
 
 // parse application/x-www-form-urlencoded
 app.use(
@@ -19,7 +20,11 @@ var middleware = require("../middleware/middleware");
 var controllers = require('../controllers');
 
 /* POST Check Login */
-app.post("/checkLogin", controllers.users.checkLogin);
+app.post("/checkLogin", passport.authenticate('local', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+    failureFlash: true
+}));
 
 app.post("/register", controllers.users.register);
 

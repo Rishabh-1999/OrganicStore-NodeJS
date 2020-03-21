@@ -4,21 +4,33 @@ var bcrypt = require("bcrypt");
 const Users = require("../models/Users");
 
 module.exports = function (passport) {
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
+
     passport.use(
         new LocalStrategy({
-            usernameField: 'email'
-        }, (email, password, done) => {
+            usernameField: 'email',
+            passReqToCallback : true
+        }, (req,email, password, done) => {
+            console.log(email+ " "+password)
             Users.findOne({
                     email: email
                 },
                 function (err, result) {
-                    if (result) {
+                    console.log("----------------------> result")
+                    console.log(result)
+                    if (result != null) {
                         bcrypt.compare(password, result.password, function (
                             err,
-                            password
+                            isMatch
                         ) {
-
-                            if (password) {
+                            console.log("--->" + isMatch)
+                            if (isMatch) {
                                 var user = new Object();
                                 user._id = result._id;
                                 user.name = result.name;
@@ -32,15 +44,11 @@ module.exports = function (passport) {
                                 console.log("-------------------Logined--------------------")
                                 return done(null, user);
                             } else {
-                                return done(null, false, {
-                                    errors: 'Username/Password Incorrect.'
-                                });
+                                return done(null, false,req.flash('errors', 'Username/Password Incorrect.'));
                             }
                         });
                     } else {
-                        return done(null, false, {
-                            errors: 'Username/Password Incorrect.'
-                        });
+                        return done(null, false,req.flash('errors', 'Username Not registered.'));
                     }
                 }
             ).select("+password").catch(err => {
@@ -49,13 +57,13 @@ module.exports = function (passport) {
         })
     );
 
-    passport.serializeUser(function (user, done) {
-        done(null, user);
-    });
+    // passport.serializeUser(function (user, done) {
+    //     done(null, user._id);
+    // });
 
-    passport.deserializeUser(function (id, done) {
-        Users.findById(id, function (err, user) {
-            done(null, user);
-        });
-    });
+    // passport.deserializeUser(function (id, done) {
+    //     Users.findById(id, function (err, user) {
+    //         done(null, user);
+    //     });
+    // });
 };
