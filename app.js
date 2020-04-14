@@ -10,11 +10,12 @@ var morgan = require("morgan");
 var flash = require("express-flash");
 const passport = require("passport");
 
+/* ENV */
 require("dotenv").config();
 
 var app = express();
 
-// Passport Config
+/* Passport Config */
 require("./config/passport")(passport);
 
 var http = require("http");
@@ -50,6 +51,7 @@ app.use(
     extended: true
   })
 );
+
 app.engine("ejs", engine);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -62,9 +64,11 @@ var middleware = require("./middleware/middleware");
 app.use("/user", require("./routes/Users"));
 app.use("/products", require("./routes/Products"));
 
+/* Models */
+var Product = require("./models/products")
+
 app.get("/", function (req, res) {
   var err_msg = req.flash("errors")[0]
-  //console.log(req.flash("errors"))
   if (req.isAuthenticated()) {
     req.logout();
   }
@@ -81,24 +85,31 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/home", middleware.checkSession, function (req, res) {
-  //console.log(req.session)
   if (req.session.passport.user.type == "Customer")
     res.render("home", {
       data: req.session.passport.user,
       shownavpro: "true",
+      title: "Home",
       success: req.flash("success"),
       errors: req.flash("errors")
     });
   else if (req.session.passport.user.type == "Seller")
-    res.render("sellerpage", {
-      data: req.session.passport.user,
-      shownavpro: "false",
-      success: req.flash("success")
-    });
+    Product.find({
+      sellercompany: req.session.passport.user.name
+    }).then(result => {
+      res.render("sellerpage", {
+        data: req.session.passport.user,
+        shownavpro: "false",
+        title: "Home",
+        sellerdata: result,
+        success: req.flash("success")
+      })
+    })
   else if (req.session.passport.user.type == "Admin")
     res.render("adminpage", {
       data: req.session.passport.user,
       shownavpro: "false",
+      title: "Home",
       success: req.flash("success")
     });
 });
@@ -119,10 +130,17 @@ app.get(
   middleware.checkSession,
   middleware.checkSeller,
   function (req, res) {
-    res.render("sellerpage", {
-      data: req.session.passport.user,
-      shownavpro: "false"
-    });
+    Product.find({
+      sellercompany: req.session.passport.user.name
+    }).then(result => {
+      res.render("sellerpage", {
+        data: req.session.passport.user,
+        shownavpro: "false",
+        title: "Home",
+        sellerdata: result,
+        success: req.flash("success")
+      })
+    })
   }
 );
 
@@ -133,7 +151,8 @@ app.get(
   function (req, res) {
     res.render("adminpageUser", {
       data: req.session.passport.user,
-      shownavpro: "false"
+      shownavpro: "false",
+      title: "User Data Page"
     });
   }
 );
@@ -145,6 +164,7 @@ app.get(
   function (req, res) {
     res.render("adminpageProduct", {
       data: req.session.passport.user,
+      title: "Product Data Page",
       shownavpro: "false"
     });
   }
@@ -158,6 +178,7 @@ app.get(
     res.render("cartpage", {
       data: req.session.passport.user,
       shownavpro: "false",
+      title: "Cart Page",
       success: req.flash("success")
     });
   }
@@ -170,6 +191,7 @@ app.get("/user/changepasswordpage", middleware.checkSession, function (
   res.render("changepasswordpage", {
     data: req.session.passport.user,
     shownavpro: "false",
+    title: "Change Password",
     success: req.flash("success"),
     errors: req.flash("errors")
   });
@@ -179,6 +201,25 @@ app.get("/logout", middleware.checkSession, function (req, res) {
   req.session.destroy();
   res.render("login");
   console.log("logouted");
+});
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.status(err.status || 500);
+  res.render("error", {
+    title: "Page404",
+    header: false
+  });
 });
 
 server.listen(PORT, () => {

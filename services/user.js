@@ -30,6 +30,7 @@ exports.getProfile = async function (query, req, res) {
             res.render("profile", {
                 data: req.session.passport.user,
                 shownavpro: "false",
+                title: req.session.passport.user.name + " Profile's",
                 newdata: add
             });
         }

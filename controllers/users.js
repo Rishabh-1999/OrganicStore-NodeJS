@@ -1,5 +1,5 @@
-var services = require("../services");
-var passport = require("passport")
+const services = require("../services");
+const passport = require("passport")
 
 module.exports.deleteuser = async function (req, res, next) {
     res.send(details = await services.user.deleteuser({
@@ -8,7 +8,7 @@ module.exports.deleteuser = async function (req, res, next) {
 };
 
 module.exports.getProfile = async function (req, res) {
-    services.user.getProfile({
+    await services.user.getProfile({
             _id: req.session.passport.user._id
         },
         req,
@@ -17,7 +17,7 @@ module.exports.getProfile = async function (req, res) {
 };
 
 module.exports.updateProfile = async function (req, res) {
-    services.user.updateProfile({
+    await services.user.updateProfile({
             _id: req.session.passport.user._id
         },
         req,
@@ -26,7 +26,7 @@ module.exports.updateProfile = async function (req, res) {
 };
 
 module.exports.getUserTable = async function (req, res) {
-    services.tabledata.getUserTable({
+    await services.tabledata.getUserTable({
             _id: req.session.passport.user._id
         },
         req,
@@ -35,7 +35,7 @@ module.exports.getUserTable = async function (req, res) {
 };
 
 module.exports.changepassword = async function (req, res) {
-    services.user.changepassword({
+    await services.user.changepassword({
             _id: req.session.passport.user._id
         },
         req,
@@ -44,7 +44,7 @@ module.exports.changepassword = async function (req, res) {
 };
 
 module.exports.register = async function (req, res) {
-    services.user.register({
+    await services.user.register({
             _id: req.session.passport.user._id
         },
         req,
@@ -54,8 +54,8 @@ module.exports.register = async function (req, res) {
 
 module.exports.checkLogin = async function (req, res) {
     passport.authenticate('local.login', {
-    successRedirect: '/home',
-    failureRedirect: '/',
-    failureFlash: true
-})
+        successRedirect: '/home',
+        failureRedirect: '/',
+        failureFlash: true
+    })
 };

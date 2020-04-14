@@ -127,10 +127,15 @@ app.post(
 
 /* POST delete Product */
 app.post(
-    "/deleteproduct",
+    "/deleteproductByAdmin",
     middleware.checkSession,
-    middleware.checkAdmin,
-    controllers.product.deleteproduct
+    controllers.product.deleteproductByAdmin
+);
+
+app.post(
+    "/deleteproductByOwner",
+    middleware.checkSession,
+    controllers.product.deleteproductByOwner
 );
 
 module.exports = app;

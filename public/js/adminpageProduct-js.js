@@ -22,7 +22,7 @@ function producttable() {
 function deleteproduct(id) {
     $.ajax({
             type: "POST",
-            url: "/products/deleteproduct",
+            url: "/products/deleteproductByAdmin",
             data: {
                 _id: id
             },

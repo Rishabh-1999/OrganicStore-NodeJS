@@ -1,10 +1,9 @@
-var services = require('../services');
+const services = require('../services');
 
 module.exports.getAllFruits = async function (req, res, next) {
-    var d = await services.product.getFruits({
+    res.send(await services.product.getFruits({
         category: "Fruits"
-    })
-    res.send(d);
+    }));
 }
 
 module.exports.getAllJuice = async function (req, res, next) {
@@ -19,8 +18,14 @@ module.exports.getAllVegetable = async function (req, res, next) {
     }));
 }
 
-exports.deleteproduct = async function (req, res, next) {
-    await services.product.deleteproduct({
+exports.deleteproductByAdmin = async function (req, res, next) {
+    await services.product.deleteproductByAdmin({
+        "_id": req.body._id
+    }, req, res);
+}
+
+exports.deleteproductByOwner = async function (req, res, next) {
+    await services.product.deleteproductByOwner({
         "_id": req.body._id
     }, req, res);
 }

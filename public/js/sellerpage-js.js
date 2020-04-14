@@ -1,30 +1,33 @@
-var productDIV = document.getElementById("productDIV");
-
-function HTMLproduct(con) {
-    return `
-        <div class="col-md-4">
-        <div class="card mb-4 shadow-sm">
-        <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
-            <div class="card-body">
-                <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
-                <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
-                <div class="d-flex jusity-content-between align-items-center">
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-}
-
-(() => {
-    $.ajax({
-            url: "/products/getSellerProduct",
-            dataType: "json",
-            async: true
-        })
-        .done(function (data) {
-            for (var index = 0; index < data.length; index++) {
-                productDIV.innerHTML += `${HTMLproduct(data[index])}`;
+function deleteItem(id) {
+    console.log(id)
+    $(document).on("click", "#deleteItem", function () {
+        d = $(this).parent().parent()[0].children;
+        $.confirm({
+            title: 'Delete Item!',
+            content: 'Are you Sure you want to Delete this Item ',
+            theme: 'supervan',
+            buttons: {
+                'Yes': {
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/products/deleteproduct");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.send(JSON.stringify({
+                            _id: id
+                        }));
+                        xhr.onload = function () {
+                            if (xhr.responseText == '1') {
+                                window.location.reload();
+                            } else
+                                alert("Failed");
+                        }
+                    }
+                },
+                'No': {
+                    btnClass: 'btn-danger',
+                }
             }
-        });
-})()
+        })
+    });
+}

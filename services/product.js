@@ -24,7 +24,16 @@ exports.getVegetable = async function (query) {
     }
 }
 
-exports.deleteproduct = async function (query, req, res) {
+exports.deleteproductByAdmin = async function (query, req, res) {
+    product.deleteOne(query, function (error, result) {
+        if (error) {
+            res.send("false");
+        } else
+            res.send("true");
+    })
+}
+
+exports.deleteproductByOwner = async function (query, req, res) {
     product.deleteOne(query, function (error, result) {
         if (error) {
             res.send("0");

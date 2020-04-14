@@ -1,5 +1,3 @@
-const passport = require("../config/passport");
-
 function checkSession(req, res, next) {
     if (req.isAuthenticated())
         next();
