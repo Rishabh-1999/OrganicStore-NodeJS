@@ -4,7 +4,6 @@ var table = document.getElementById("table");
 function getuserheader() {
     return `
     <tr>
-        <th>#</th>
         <th>Name</th>
         <th>Email</th>
         <th>Phoneno</th>
@@ -33,9 +32,6 @@ function inituserstable() {
             },
         },
         "columns": [{
-                "data": "_id"
-            },
-            {
                 "data": "email"
             },
             {
@@ -80,7 +76,8 @@ function deleteuser(id) {
             async: true
         })
         .done(function (data) {
-            $('#deletedmodal').modal('show');
+            if (data == "1")
+                $('#deletedmodal').modal('show');
             table.ajax.reload(null, false);
         });
 }

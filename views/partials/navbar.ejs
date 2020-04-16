@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar fixed-top navbar-dark navbar-expand-md bg-success text-white">
-    <div class="">
-      <a class="text-white navbar-brand" href="/home">
+    <div class="navbar-brand">
+      <a class="text-white" href="/home">
         <i class="fa fa-pagelines"></i> Organic Store
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -23,7 +23,7 @@
         </li>
         <% } %>
       </ul>
-      <div class="form-inline mt-2 mt-md-0 float-right">
+      <div class="form-inline m-2 float-right m-2">
         <% if(data.type == "Seller"){ %>
         <a href="/user/addproductpage" class="nav-link text-white">
           <i class="fa fa-cart-plus"></i> Seller
@@ -32,13 +32,13 @@
         <% if(data.type == "Customer"){ %>
         <a href="/user/cart" class="text-white nav-link">
           <i class="text-warning fa fa-shopping-cart"></i>
-          Shopping Cart <i style="color:yellow" id="cart_n"> [<%= data.totalincart %>] </i>
+          Shopping Cart <i class="text-warning" id="cart_n"> [<%= data.totalincart %>] </i>
         </a>
         <a href="/user/ordered" class="nav-link text-white">
           <i class="fa fa-shopping-basket"></i> Ordered
         </a>
         <% } %>
-        <div class="nav-item dropdown">
+        <div class="nav-item dropdown mr-5">
           <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button"
             aria-haspopup="true" aria-expanded="false"><%= data.name %></a>
           <div class="dropdown-menu">

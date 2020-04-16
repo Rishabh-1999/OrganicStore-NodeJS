@@ -11,7 +11,9 @@ var flash = require("express-flash");
 const passport = require("passport");
 
 /* ENV */
-require("dotenv").config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 
 var app = express();
 
@@ -73,6 +75,7 @@ app.get("/", function (req, res) {
     req.logout();
   }
   res.render("login", {
+    title: "Login",
     errors: err_msg == undefined ? [] : err_msg,
     success: req.flash("success")
   });
@@ -80,6 +83,7 @@ app.get("/", function (req, res) {
 
 app.get("/register", function (req, res) {
   res.render("register", {
+    title: "Register",
     errors: req.flash("errors")
   });
 });
@@ -114,10 +118,7 @@ app.get("/home", middleware.checkSession, function (req, res) {
     });
 });
 
-app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (
-  req,
-  res
-) {
+app.get("/adminpage", middleware.checkSession, middleware.checkAdmin, function (req, res) {
   res.render("adminpage", {
     data: req.session.passport.user,
     shownavpro: "false"

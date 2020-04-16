@@ -4,7 +4,6 @@ var theader = document.getElementById("theader");
 function getproductheader() {
     return `
     <tr>
-        <th>#</th>
         <th>Name</th>
         <th>Photo</th>
         <th>Price</th>
@@ -47,9 +46,6 @@ function initproducttable() {
             },
         },
         "columns": [{
-                "data": "_id"
-            },
-            {
                 "data": "name"
             },
             {

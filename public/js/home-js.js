@@ -4,49 +4,7 @@ var vegetableDIV = document.getElementById("vegetableDIV");
 var cart_n = document.getElementById("cart_n");
 var cartno;
 
-function HTMLfruitProduct(con) {
-    return `
-        <div class="col-md-4">
-        <div class="card mb-4 shadow-sm">
-        <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
-            <div class="card-body">
-                <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
-                <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
-                <div class="d-flex jusity-content-between align-items-center">
-                    <div class="btn-group">
-                        <button type="button" onclick="addTocart('${con._id}')" class="btn btn-sm btn-outline-secondary" >
-                        Add to cart</button>
-                        <input class="form-control col-sm-3" type="number" value="1" id="no${con._id}">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-}
-
-function HTMLjuiceProduct(con) {
-    return `
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-            <img class="card-img-top" style="height:16rem;" src="${con.imgloc}" alt="Card image cap">
-                <div class="card-body">
-                    <p class="card-text font-weight-bold text-capitalize">${con.name}</p>
-                    <p class="card-text">Price: <i class="fa fa-inr"></i> ${con.price}.00</p>
-                    <div class="d-flex jusity-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" onclick="addTocart('${con._id}')" class="btn btn-sm btn-outline-secondary" >
-                            Add to cart</button>
-                            <input class="form-control col-sm-3" type="number" value="1" id="no${con._id}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function HTMLvegetableProduct(con) {
+function DOMProduct(con) {
     return `
         <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
@@ -118,7 +76,7 @@ function animatecart(i) {
         async: true
     }).done(function (data) {
         for (var index = 0; index < data.length; index++) {
-            friutDIV.innerHTML += `${HTMLfruitProduct(data[index])}`;
+            friutDIV.innerHTML += `${DOMProduct(data[index])}`;
         }
     });
 
@@ -127,7 +85,7 @@ function animatecart(i) {
         dataType: "json"
     }).done(function (data) {
         for (var index = 0; index < data.length; index++) {
-            juiceDIV.innerHTML += `${HTMLjuiceProduct(data[index])}`;
+            juiceDIV.innerHTML += `${DOMProduct(data[index])}`;
         }
     });
 
@@ -136,7 +94,7 @@ function animatecart(i) {
         dataType: "json"
     }).done(function (data) {
         for (var index = 0; index < data.length; index++) {
-            vegetableDIV.innerHTML += `${HTMLvegetableProduct(data[index])}`;
+            vegetableDIV.innerHTML += `${DOMProduct(data[index])}`;
         }
     });
 })();

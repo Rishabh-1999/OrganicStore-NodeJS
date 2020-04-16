@@ -1,5 +1,4 @@
 function deleteItem(id) {
-    console.log(id)
     $(document).on("click", "#deleteItem", function () {
         d = $(this).parent().parent()[0].children;
         $.confirm({

@@ -101,11 +101,10 @@ app.get(
   middleware.checkCustomer,
   function (req, res) {
     Users.findOne({
-      _id: req.session.passport.user._id,
-    })
+        _id: req.session.passport.user._id,
+      })
       .populate("ordered.productdata")
       .then((result) => {
-        console.log(result.ordered);
         res.render("orderedpage", {
           data: req.session.passport.user,
           shownavpro: "false",
