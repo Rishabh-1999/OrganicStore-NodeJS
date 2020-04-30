@@ -46,6 +46,7 @@ app.post(
 app.post(
   "/getUserTable",
   middleware.checkSession,
+  middleware.checkAdmin,
   controllers.users.getUserTable
 );
 
@@ -85,7 +86,7 @@ app.post(
 );
 
 /* POST delete a User */
-app.post("/deleteuser", controllers.users.deleteuser);
+app.post("/deleteuser", middleware.checkAdmin, controllers.users.deleteuser);
 
 /* POST Buy all items from cart */
 app.post(
@@ -113,6 +114,8 @@ app.get(
           ordered: result.ordered,
           success: req.flash("success"),
         });
+      }).catch(err => {
+        throw new Error("Error while Getting Ordered Data from Database of User")
       });
   }
 );

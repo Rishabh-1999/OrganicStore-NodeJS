@@ -5,7 +5,7 @@ const saltRounds = 10;
 exports.deleteuser = async function (query) {
     Users.deleteOne(query, function (error, result) {
         if (error) {
-            console.log(error);
+            throw new Error("Error while Deleting Users by Admin")
             return "0";
         } else
             return "1";
@@ -16,7 +16,7 @@ exports.getProfile = async function (query, req, res) {
     Users.findOne({
         "_id": req.session.passport.user._id
     }).exec(function (err, result) {
-        if (err) console.log(err);
+        if (err) throw new Error("Error while Getting Profile of Users")
         else {
             var add = new Object;
             add.address1 = result.address1;
@@ -55,7 +55,7 @@ exports.updateProfile = async function (query, req, res) {
         },
         function (error, result) {
             if (error) {
-                req.flash('errors', 'Profile failed to update.');
+                throw new Error("Error while Updating Users Profile")
             } else {
                 req.flash('success', 'Profile Updated');
             }
@@ -73,12 +73,14 @@ exports.changepassword = async function (query, req, res) {
         "_id": req.session.passport.user._id
     }, function (error, result) {
         if (error)
-            throw error;
+            throw new Error("Error in ChangePassword")
         else {
             if (result == null)
                 res.send("0");
             else {
                 bcrypt.compare(req.body.oldpass, result.password, function (err, boolans) {
+                    if (err)
+                        throw new Error("Error in Comparing Password in Changing Password")
                     if (boolans == true) {
                         bcrypt.hash(req.body.newpass, saltRounds, function (err, newpass) {
                             Users.updateOne({
@@ -89,7 +91,7 @@ exports.changepassword = async function (query, req, res) {
                                 }
                             }, function (error, result) {
                                 if (error)
-                                    throw error;
+                                    throw new Error("Error in Hashing of new Password in Changing Password")
                                 else {
                                     if (result == null)
                                         req.flash('errors', 'Password failed to Update.');

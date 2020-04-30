@@ -60,15 +60,15 @@ exports.getProductTable = async function (query1, req, res) {
 
     product.find(query, {}, params, function (err, data) {
         if (err)
-            console.log(err);
+            throw new Error("Error while fetching Product Details for DataTable by Admin")
         else {
             product.countDocuments(query, function (err, filteredCount) {
                 if (err)
-                    console.log(err);
+                    throw new Error("Error while fetching query Product Details for DataTable by Admin")
                 else {
                     product.countDocuments(function (err, totalCount) {
                         if (err)
-                            console.log(err);
+                            throw new Error("Error while fetching All Count Documents in \"getProductTable\"")
                         else {
                             res.send({
                                 "recordsTotal": totalCount,
@@ -149,15 +149,15 @@ exports.getUserTable = async function (query1, req, res) {
 
     Users.find(query, {}, params, function (err, data) {
         if (err)
-            console.log(err);
+            throw new Error("Error while fetching Users Details for DataTable by Admin")
         else {
             Users.countDocuments(query, function (err, filteredCount) {
                 if (err)
-                    console.log(err);
+                    throw new Error("Error while fetching query Users Details for DataTable by Admin")
                 else {
                     Users.countDocuments(function (err, totalCount) {
                         if (err)
-                            console.log(err);
+                            throw new Error("Error while fetching All Users Details for DataTable by Admin")
                         else
                             res.send({
                                 "recordsTotal": totalCount,

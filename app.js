@@ -108,6 +108,8 @@ app.get("/home", middleware.checkSession, function (req, res) {
         sellerdata: result,
         success: req.flash("success")
       })
+    }).catch(err => {
+      throw new Error('Error while fetching Seller Data for Seller Page')
     })
   else if (req.session.passport.user.type == "Admin")
     res.render("adminpage", {
@@ -141,6 +143,8 @@ app.get(
         sellerdata: result,
         success: req.flash("success")
       })
+    }).catch(err => {
+      throw new Error('Error while fetching Seller Data for Seller Page')
     })
   }
 );

@@ -21,11 +21,13 @@ module.exports = function (passport) {
                     email: email
                 },
                 function (err, result) {
+                    if (err) throw new Error("Error in Authentication by \"Passport\"")
                     if (result != null) {
                         bcrypt.compare(password, result.password, function (
                             err,
                             isMatch
                         ) {
+                            if (err) throw new Error("Error in Authentication by \"Bcrypt\"")
                             if (isMatch) {
                                 var user = new Object();
                                 user._id = result._id;
@@ -48,7 +50,7 @@ module.exports = function (passport) {
                     }
                 }
             ).select("+password").catch(err => {
-                res.send(error);
+                if (err) throw new Error("Error in Authentication by \"Local Strategy\"")
             });
         })
     );

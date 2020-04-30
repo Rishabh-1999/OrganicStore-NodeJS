@@ -64,20 +64,20 @@ app.get(
     controllers.product.getSellerProduct
 );
 
-/* MULTER */
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./public/img/" + req.body.category);
-    },
-    filename: (req, file, cb) => {
-        var photoname = req.body.productname + path.extname(file.originalname);
-        cb(null, photoname);
-    }
-});
+// /* MULTER */
+// var storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, "./public/img/" + req.body.category);
+//     },
+//     filename: (req, file, cb) => {
+//         var photoname = req.body.productname + path.extname(file.originalname);
+//         cb(null, photoname);
+//     }
+// });
 
-var upload = multer({
-    storage: storage
-}).single("productphoto");
+// var upload = multer({
+//     storage: storage
+// }).single("productphoto");
 
 /* POST Add Product */
 app.post(
@@ -94,7 +94,7 @@ app.post(
                 overwrite: true
             },
             function (err, result) {
-                if (err) console.log(err);
+                if (err) throw new Error("Error while Uploading photo during \"Adding a new Product\"")
                 else {
                     let newProduct = new producttable({
                             name: req.body.productname,
@@ -110,6 +110,8 @@ app.post(
                             });
                             res.write('<script>window.location= "/sellerpage"</script>');
                             res.end();
+                        }).catch(err => {
+                            if (err) throw new Error("Error while Saving Data to Database during \"Adding a new Product\"")
                         });
                 }
             }
@@ -129,6 +131,7 @@ app.post(
 app.post(
     "/deleteproductByAdmin",
     middleware.checkSession,
+    middleware.checkAdmin,
     controllers.product.deleteproductByAdmin
 );
 
