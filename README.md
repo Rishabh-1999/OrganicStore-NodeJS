@@ -20,16 +20,17 @@ Password: tata<br>
 ## Pre-requisites
 
 - Node JS (Tested on v12.14.0)
-- Mongoose
+- MongooseDB
+- MongooseDB Compass
 - Pre-requisites or Dependencies(Below)
 
 ## Role
 
 - Admin or Root
-  - See all Product and Remove Product
-  - See all Users(Seller or Customer) and Remove them
+  - See all Product and Delete Product
+  - See all Users(Seller or Customer) and Delete them
 - Seller
-  - Ability to add New Product
+  - Ability to add New and Delete Product
   - Common Features (Change Password etc.)
 - Customer
   - See all Product available from Seller
@@ -184,11 +185,31 @@ npm install bcrpty
 npm install dateformat
 ```
 
+- Passport
+
+```
+npm install passport
+```
+
+- Passport Local
+
+```
+npm install passport-local
+```
+
 ## Directory
 
 ```bash
 |___ Root
 |   |--- app.js
+|   |
+|   |--- Procfile ( Heroku File )
+|   |
+|   |--- .env ( Enviroment File )
+|   |
+|   |--- config
+|   |    |--- db.js
+|   |    |--- passport.js
 |   |
 |   |--- Controller
 |   |    |--- index.js
@@ -202,18 +223,23 @@ npm install dateformat
 |   |    |--- middleware.js
 |   |
 |   |--- Models
-|   |    |--- db connect
 |   |    |--- product.js
 |   |    |--- Users.js
 |   |
 |   |--- Public
 |   |    |--- css (Static)
-|   |    |--- img (Staic and Dynamic)
-|   |    |--- js (Static)
+|   |    |--- img (Static)
+|   |    |--- js
+|   |    |    |--- adminpageProduct-js.js
+|   |    |    |--- adminpageUser-js.js
+|   |    |    |--- cartpage-js.js
+|   |    |    |--- home-js.js
+|   |    |    |--- sellerpage-js.js
 |   |
 |   |--- Routes
 |   |    |--- Product.js
 |   |    |--- Users.js
+|   |
 |   |--- services
 |   |    |--- index.js
 |   |    |--- product.js
@@ -221,16 +247,27 @@ npm install dateformat
 |   |    |--- tabledata.js
 |   |    |--- user.js
 |   |    |--- userproduct.js
+|   |
 |   |--- viwes
+|   |    |--- layout
+|   |    |   |--- layout
+|   |    |
 |   |    |--- partials
+|   |    |    |--- includes
+|   |    |    |     |--- link-css.ejs
+|   |    |    |     |--- link-js.ejs
+|   |    |    |
 |   |    |    |--- footbar.ejs
+|   |    |    |--- header.ejs
 |   |    |    |--- navbar.ejs
+|   |    |
 |   |    |--- addproductpage.ejs
 |   |    |--- adminpage.ejs
 |   |    |--- adminpageProduct.ejs
 |   |    |--- adminpageUser.ejs
 |   |    |--- cartpage.ejs
 |   |    |--- changepasswordpage.ejs
+|   |    |--- error.ejs
 |   |    |--- home.ejs
 |   |    |--- login.ejs
 |   |    |--- orderedpage.ejs
