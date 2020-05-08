@@ -2,11 +2,13 @@
 
 A E-Commerce website in Node JS in which <b>User</b> can buy Products and <b>Seller</b> can Sell products. It will be overlooked by <b>Admin or Root</b>.
 
+It will run under the url http://127.0.0.1:3000/
+
+### To Run
 ```
 npm start or node app.js
 ```
-
-It will run under the url http://127.0.0.1:3000/
+### To Run Dependiences
 
 Email and Password for Online Website:<br>
 Customer:<br>
@@ -21,7 +23,7 @@ Password: tata<br>
 
 - Node JS (Tested on v12.14.0)
 - MongooseDB
-- MongooseDB Compass
+- MongooseDB Compass ( Optional )
 - Pre-requisites or Dependencies(Below)
 
 ## Role
@@ -250,13 +252,12 @@ npm install passport-local
 |   |
 |   |--- viwes
 |   |    |--- layout
-|   |    |   |--- layout
+|   |    |   |--- layout.ejs
 |   |    |
 |   |    |--- partials
 |   |    |    |--- includes
 |   |    |    |     |--- link-css.ejs
 |   |    |    |     |--- link-js.ejs
-|   |    |    |
 |   |    |    |--- footbar.ejs
 |   |    |    |--- header.ejs
 |   |    |    |--- navbar.ejs
