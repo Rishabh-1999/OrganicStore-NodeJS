@@ -71,44 +71,54 @@ exports.updateProfile = async function (query, req, res) {
 exports.changepassword = async function (query, req, res) {
     Users.findOne({
         "_id": req.session.passport.user._id
-    }, function (error, result) {
-        if (error)
-            throw new Error("Error in ChangePassword")
-        else {
-            if (result == null)
-                res.send("0");
-            else {
-                bcrypt.compare(req.body.oldpass, result.password, function (err, boolans) {
-                    if (err)
-                        throw new Error("Error in Comparing Password in Changing Password")
-                    if (boolans == true) {
-                        bcrypt.hash(req.body.newpass, saltRounds, function (err, newpass) {
-                            Users.updateOne({
-                                "_id": req.session.passport.user._id,
-                            }, {
-                                $set: {
-                                    "password": newpass
-                                }
-                            }, function (error, result) {
-                                if (error)
-                                    throw new Error("Error in Hashing of new Password in Changing Password")
-                                else {
-                                    if (result == null)
-                                        req.flash('errors', 'Password failed to Update.');
-                                    else
-                                        req.flash('success', 'Password Updated.');
-                                    return res.redirect('/user/changepasswordpage');
-                                }
-                            });
+    }).then((result) => {
+        if (result) {
+            bcrypt.compare(req.body.oldpass, result.password, function (err, boolans) {
+                if (err) {
+                    err = new Error("Error in Comparing Password in Changing Password")
+                    err.status = 500;
+                    return next(err);
+                }
+                if (boolans == true) {
+                    bcrypt.hash(req.body.newpass, saltRounds, function (err, newpass) {
+                        if (err) {
+                            err = new Error("Error in Comparing Password in Changing Password")
+                            err.status = 500;
+                            return next(err);
+                        }
+                        Users.updateOne({
+                            "_id": req.session.passport.user._id,
+                        }, {
+                            $set: {
+                                "password": newpass
+                            }
+                        }).then((result) => {
+                            if (result == null)
+                                req.flash('errors', 'Password failed to Update.');
+                            else
+                                req.flash('success', 'Password Updated.');
+                            return res.redirect('/user/changepasswordpage');
+                        }).catch((err) => {
+                            err.message = new Error('Internal Server Error');
+                            err.status = 500;
+                            return next(err);
                         });
-                    } else {
-                        req.flash('errors', 'Old Password Incorrect.');
-                        return res.redirect('/user/changepasswordpage');
-                    }
-                });
-            }
+                    });
+                } else {
+                    req.flash('errors', 'Old Password Incorrect.');
+                    return res.redirect('/user/changepasswordpage');
+                }
+            });
+
+        } else {
+            req.flash('errors', 'Error in Changing Password');
+            return res.redirect('/user/changepasswordpage');
         }
-    }).select("+password");
+    }).select("+password").catch((err) => {
+        err.message = new Error('Internal Server Error');
+        err.status = 500;
+        return next(err);
+    });
 }
 
 exports.register = async function (query, req, res) {

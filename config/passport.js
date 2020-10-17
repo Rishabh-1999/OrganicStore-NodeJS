@@ -18,39 +18,42 @@ module.exports = function (passport) {
             passReqToCallback: true
         }, (req, email, password, done) => {
             Users.findOne({
-                    email: email
-                },
-                function (err, result) {
-                    if (err) throw new Error("Error in Authentication by \"Passport\"")
-                    if (result != null) {
-                        bcrypt.compare(password, result.password, function (
-                            err,
-                            isMatch
-                        ) {
-                            if (err) throw new Error("Error in Authentication by \"Bcrypt\"")
-                            if (isMatch) {
-                                var user = new Object();
-                                user._id = result._id;
-                                user.name = result.name;
-                                user.email = result.email;
-                                user.gender = result.gender;
-                                user.city = result.city;
-                                user.DOB = result.DOB;
-                                user.totalincart = result.totalincart;
-                                user.phoneno = result.phoneno;
-                                user.type = result.type;
-                                console.log("-------------------Logined--------------------")
-                                return done(null, user);
-                            } else {
-                                return done(null, false, req.flash('errors', 'Username/Password Incorrect.'));
-                            }
-                        });
-                    } else {
-                        return done(null, false, req.flash('errors', 'Username Not registered.'));
-                    }
+                email: email
+            }).select("+password").then((result) => {
+                if (result != null) {
+                    bcrypt.compare(password, result.password, function (
+                        err,
+                        isMatch
+                    ) {
+                        if (err) {
+                            err.message = new Error("Error in Authentication by \"Bcrypt\"")
+                            err.status = 500;
+                            return next(err);
+                        }
+                        if (isMatch) {
+                            var user = new Object();
+                            user._id = result._id;
+                            user.name = result.name;
+                            user.email = result.email;
+                            user.gender = result.gender;
+                            user.city = result.city;
+                            user.DOB = result.DOB;
+                            user.totalincart = result.totalincart;
+                            user.phoneno = result.phoneno;
+                            user.type = result.type;
+                            console.log("-------------------Logined--------------------")
+                            return done(null, user);
+                        } else {
+                            return done(null, false, req.flash('errors', 'Username/Password Incorrect.'));
+                        }
+                    });
+                } else {
+                    return done(null, false, req.flash('errors', 'Username Not registered.'));
                 }
-            ).select("+password").catch(err => {
-                if (err) throw new Error("Error in Authentication by \"Local Strategy\"")
+            }).catch(err => {
+                err.message = new Error('Internal Server Error');
+                err.status = 500;
+                return next(err);
             });
         })
     );

@@ -17,15 +17,15 @@ if (process.env.NODE_ENV != "production") {
 
 var app = express();
 
+/* DB */
+require("./config/db");
+
 /* Passport Config */
 require("./config/passport")(passport);
 
 var http = require("http");
 var server = http.Server(app);
 var PORT = process.env.PORT || 3000;
-
-/* DB */
-require("./config/db");
 
 app.use(morgan("dev"));
 
@@ -88,7 +88,7 @@ app.get("/register", function (req, res) {
   });
 });
 
-app.get("/home", middleware.checkSession, function (req, res) {
+app.get("/home", middleware.checkSession, function (req, res, next) {
   if (req.session.passport.user.type == "Customer")
     res.render("home", {
       data: req.session.passport.user,
@@ -109,7 +109,9 @@ app.get("/home", middleware.checkSession, function (req, res) {
         success: req.flash("success")
       })
     }).catch(err => {
-      throw new Error('Error while fetching Seller Data for Seller Page')
+      err.message = new Error('Error while fetching Seller Product Detail\'s for Seller Page');
+      err.status = 404;
+      return next(err);
     })
   else if (req.session.passport.user.type == "Admin")
     res.render("adminpage", {
@@ -208,22 +210,35 @@ app.get("/logout", middleware.checkSession, function (req, res) {
   console.log("logouted");
 });
 
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   var err = new Error("Not Found");
+//   err.status = 404;
+//   next(err);
+// });
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error("Not Found");
-  err.status = 404;
-  next(err);
+  next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
+  res.locals.status = err.status;
+
+  if (err.stack && err.status != 401)
+    res.locals.stack = err.stack;
+  else
+    res.locals.stack = null;
+
   res.locals.error = req.app.get("env") === "development" ? err : {};
+  console.log(err.stack)
+  // render the error page
   res.status(err.status || 500);
   res.render("error", {
-    title: "Page404",
-    header: false
+    title: "Error"
   });
 });
 

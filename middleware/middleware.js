@@ -15,15 +15,21 @@ function checkCustomer(req, res, next) {
 function checkAdmin(req, res, next) {
     if (req.session.passport.user.type == "Admin")
         next();
-    else
-        res.redirect('/');
+    else {
+        var err = new Error('You are Unauthorized as Admin');
+        err.status = 401;
+        return next(err);
+    }
 }
 
 function checkSeller(req, res, next) {
     if (req.session.passport.user.type == "Seller")
         next();
-    else
-        res.redirect('/');
+    else {
+        var err = new Error('You are Unauthorized as Seller');
+        err.status = 401;
+        return next(err);
+    }
 }
 
 // Exporting all the modules
